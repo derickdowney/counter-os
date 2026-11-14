@@ -9,7 +9,6 @@ def test_Counter_init_requires_Count_value_object():
         Counter()
 
 
-def test_Counter_is_mutable():
-    counter: Counter = Counter(Count(0))
-    counter.count = Count(1)
-    assert counter.count == Count(1)
+def test_Counter_is_mutable(counter):
+    counter.count = Count(12345)
+    assert counter.count == Count(12345)
