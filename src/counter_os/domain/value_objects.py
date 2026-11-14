@@ -5,6 +5,6 @@ from dataclasses import dataclass
 class Count:
     count: int
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.count < 0:
             raise ValueError("Count cannot be less than 0")

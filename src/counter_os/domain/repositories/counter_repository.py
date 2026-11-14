@@ -1,11 +1,13 @@
 from abc import ABC, abstractmethod
 
+from counter_os.domain.entities.counter import Counter
+
 
 class CounterRepository(ABC):
     @abstractmethod
-    def save(self):
+    def save(self, counter: Counter) -> None:
         pass
 
     @abstractmethod
-    def get(self):
+    def get(self) -> Counter:
         pass
