@@ -13,11 +13,12 @@ set shortmess+=aoO
 badd +1 src/counter_os/hello.py
 badd +1 tests/test_hello.py
 badd +1 pyproject.toml
-badd +0 term://~/projects/counter-os//97726:/bin/bash
+badd +1 term://~/projects/counter-os//97726:/bin/bash
+badd +1 ~/projects/clean-python/tests/notes.md
 argglobal
 %argdel
-$argadd .
-edit src/counter_os/hello.py
+$argadd ./
+edit tests/test_hello.py
 let s:save_splitbelow = &splitbelow
 let s:save_splitright = &splitright
 set splitbelow splitright
@@ -51,6 +52,7 @@ exe 'vert 3resize ' . ((&columns * 90 + 90) / 181)
 exe '4resize ' . ((&lines * 23 + 24) / 49)
 exe 'vert 4resize ' . ((&columns * 90 + 90) / 181)
 argglobal
+balt src/counter_os/hello.py
 setlocal foldmethod=expr
 setlocal foldexpr=v:lua.vim.treesitter.foldexpr()
 setlocal foldmarker={{{,}}}
@@ -80,19 +82,19 @@ setlocal foldlevel=99
 setlocal foldminlines=1
 setlocal foldnestmax=20
 setlocal foldenable
-let s:l = 5 - ((4 * winheight(0) + 11) / 22)
+let s:l = 3 - ((2 * winheight(0) + 11) / 22)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 5
-normal! 034|
+keepjumps 3
+normal! 0
 wincmd w
 argglobal
-if bufexists(fnamemodify("tests/test_hello.py", ":p")) | buffer tests/test_hello.py | else | edit tests/test_hello.py | endif
+if bufexists(fnamemodify("src/counter_os/hello.py", ":p")) | buffer src/counter_os/hello.py | else | edit src/counter_os/hello.py | endif
 if &buftype ==# 'terminal'
-  silent file tests/test_hello.py
+  silent file src/counter_os/hello.py
 endif
-balt src/counter_os/hello.py
+balt tests/test_hello.py
 setlocal foldmethod=expr
 setlocal foldexpr=v:lua.vim.treesitter.foldexpr()
 setlocal foldmarker={{{,}}}
@@ -109,11 +111,11 @@ keepjumps 1
 normal! 0
 wincmd w
 argglobal
-if bufexists(fnamemodify("pyproject.toml", ":p")) | buffer pyproject.toml | else | edit pyproject.toml | endif
+if bufexists(fnamemodify("~/projects/clean-python/tests/notes.md", ":p")) | buffer ~/projects/clean-python/tests/notes.md | else | edit ~/projects/clean-python/tests/notes.md | endif
 if &buftype ==# 'terminal'
-  silent file pyproject.toml
+  silent file ~/projects/clean-python/tests/notes.md
 endif
-balt tests/test_hello.py
+balt pyproject.toml
 setlocal foldmethod=expr
 setlocal foldexpr=v:lua.vim.treesitter.foldexpr()
 setlocal foldmarker={{{,}}}
