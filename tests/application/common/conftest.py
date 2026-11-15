@@ -7,4 +7,5 @@ from counter_os.application.common.result import Result
 
 @pytest.fixture
 def error_result():
-    return Result(Error(ErrorCode.COUNT_CANNOT_BE_NEGATIVE, "some error message"))
+    error: Error = Error(ErrorCode.COUNT_CANNOT_BE_NEGATIVE, "some error message")
+    return Result(error=error)

@@ -30,3 +30,14 @@ def test_Result_is_immutable(error_result):
 
 def test_Result_with_error_is_not_a_success(error_result):
     assert error_result.is_success == False
+
+
+def test_Result_success_init_requires_any_arg():
+    with pytest.raises(TypeError):
+        Result.success()
+
+
+def test_Result_value_is_accessible():
+    result: Result = Result.success("some value")
+    assert isinstance(result.value, str)
+    assert result.value == "some value"
