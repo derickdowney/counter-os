@@ -15,4 +15,4 @@ class Result:
 
     @property
     def is_success(self) -> bool:
-        return True
+        return self.error is None

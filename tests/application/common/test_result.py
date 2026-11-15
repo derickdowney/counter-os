@@ -26,3 +26,7 @@ def test_Result_is_immutable(error_result):
     new_error: Error = Error(ErrorCode.COUNT_CANNOT_BE_NEGATIVE, "new message")
     with pytest.raises(FrozenInstanceError):
         error_result.error = new_error
+
+
+def test_Result_with_error_is_not_a_success(error_result):
+    assert error_result.is_success == False
