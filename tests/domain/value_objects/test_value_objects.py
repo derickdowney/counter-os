@@ -20,3 +20,8 @@ def test_Count_is_immutable():
 def test_Count_raises_CountCannotBeNegative_when_less_than_zero():
     with pytest.raises(CountCannotBeNegative):
         Count(-1)
+
+
+def test_Count_raises_TypeError_when_init_with_boolean():
+    with pytest.raises(TypeError):
+        Count(True)
