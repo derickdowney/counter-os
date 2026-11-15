@@ -1,3 +1,5 @@
+from dataclasses import FrozenInstanceError
+
 import pytest
 
 from counter_os.application.common.error import Error
@@ -20,3 +22,9 @@ def test_Result_error_code_and_message_are_accessible():
     result: Result = Result.failure(error)
     assert result.error.code == "COUNT_CANNOT_BE_NEGATIVE"
     assert result.error.message == "test message"
+
+
+def test_Result_is_immutable():
+    result: Result = Result()
+    with pytest.raises(FrozenInstanceError):
+        result.error = Error(ErrorCode.COUNT_CANNOT_BE_NEGATIVE, "test")

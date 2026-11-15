@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from counter_os.application.common.error import Error
 
 
-@dataclass()
+@dataclass(frozen=True)
 class Result:
     """Represents success or failure of a use case execution"""
 
