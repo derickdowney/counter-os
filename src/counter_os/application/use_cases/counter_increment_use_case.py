@@ -4,5 +4,5 @@ from counter_os.domain.repositories.counter_repository import CounterRepository
 
 
 @dataclass(frozen=True)
-class CountUpUseCase:
+class CounterIncrementUseCase:
     counter_repository: CounterRepository
