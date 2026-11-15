@@ -1,13 +1,9 @@
 from dataclasses import FrozenInstanceError
-from enum import StrEnum
 
 import pytest
 
-from counter_os.application.common.results import Error, ErrorCode
-
-
-def test_ErrorCode_is_StrEnum():
-    assert isinstance(ErrorCode.COUNT_CANNOT_BE_NEGATIVE, StrEnum)
+from counter_os.application.common.error import Error
+from counter_os.application.common.error_codes import ErrorCode
 
 
 def test_Error_init_requires_error_code_and_error_message_and_optional_details():

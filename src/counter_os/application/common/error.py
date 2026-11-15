@@ -1,10 +1,7 @@
 from dataclasses import dataclass
-from enum import StrEnum
 from typing import Any
 
-
-class ErrorCode(StrEnum):
-    COUNT_CANNOT_BE_NEGATIVE = "COUNT_CANNOT_BE_NEGATIVE"
+from counter_os.application.common.error_codes import ErrorCode
 
 
 @dataclass(frozen=True)
