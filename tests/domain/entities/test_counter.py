@@ -18,3 +18,9 @@ def test_Counter_is_mutable(counter):
 def test_Counter_increment_counts_up_by_one(counter):
     counter.increment()
     assert counter.count == Count(1)
+
+
+def test_Counter_decrement_counts_down_by_one():
+    counter: Counter = Counter(Count(100))
+    counter.decrement()
+    assert counter.count == Count(99)

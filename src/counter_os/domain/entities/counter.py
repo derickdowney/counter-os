@@ -8,6 +8,7 @@ class Counter:
     count: Count
 
     def increment(self):
-        current_count: int = self.count.value
-        new_count: int = current_count + 1
-        self.count = Count(new_count)
+        self.count = Count(self.count.value + 1)
+
+    def decrement(self):
+        self.count = Count(self.count.value - 1)
