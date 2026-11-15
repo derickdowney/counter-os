@@ -1,5 +1,7 @@
 # TODO
-- Need to update 
+- Need to implement FileCounterRepository and add "COUNTER_NOT_FOUND" error
+
+
 # Project Setup Worklog
 - Ran `uv init counter-os`
 - Ran `source .venv/bin/activate`
