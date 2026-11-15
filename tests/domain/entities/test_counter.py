@@ -1,7 +1,9 @@
 import pytest
 
 from counter_os.domain.entities.counter import Counter
-from counter_os.domain.exceptions import CountCannotBeNegative
+from counter_os.domain.exceptions import (
+    CounterCannotDecrementBelowZero,
+)
 from counter_os.domain.value_objects.count import Count
 
 
@@ -27,6 +29,6 @@ def test_Counter_decrement_counts_down_by_one():
     assert counter.count == Count(99)
 
 
-def test_Counter_decrement_below_zero_raises_CountCannotBeNegative(counter):
-    with pytest.raises(CountCannotBeNegative):
+def test_Counter_decrement_below_zero_raises_CounterCannotDecrementBelowZero(counter):
+    with pytest.raises(CounterCannotDecrementBelowZero):
         counter.decrement()

@@ -19,7 +19,7 @@ def test_CounterIncrementUseCase_is_immutable(counter_repository):
         count_up_use_case.counter_repository = counter_repository
 
 
-def test_CounterIncrementUseCase_execute():
+def test_CounterIncrementUseCase_execute_success():
     counter_repo: Mock = Mock(spec=CounterRepository)
     counter_repo.get.return_value = Counter(Count(0))
 
