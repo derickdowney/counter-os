@@ -31,8 +31,7 @@ def test_CounterDecrementUseCase_execute_decrement_below_zero():
 
     assert not result.is_success
     assert result.error is not None
-    assert result.error.code == ErrorCode.COUNTER_CANNOT_DECREMENT_BELOW_ZERO
+    assert result.error.code == ErrorCode.COUNT_CANNOT_BE_NEGATIVE
     assert (
-        result.error.message
-        == "Counter has a count value of 0 and cannot be decremented below zero."
+        result.error.message == "-1 is a negative value and count cannot be negative."
     )

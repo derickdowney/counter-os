@@ -21,4 +21,4 @@ def test_Error_is_immutable():
 def test_Error_count_cannot_be_negative():
     error: Error = Error.count_cannot_be_negative(-1)
     assert error.code == ErrorCode.COUNT_CANNOT_BE_NEGATIVE
-    assert error.message == "-1 is negative value and count cannot be negative."
+    assert error.message == "-1 is a negative value and count cannot be negative."
