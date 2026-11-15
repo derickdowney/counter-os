@@ -4,7 +4,7 @@ from typing import Any
 
 
 class ErrorCode(StrEnum):
-    COUNTER_CANNOT_BE_NEGATIVE = "COUNTER_CANNOT_BE_NEGATIVE"
+    COUNT_CANNOT_BE_NEGATIVE = "COUNT_CANNOT_BE_NEGATIVE"
 
 
 @dataclass(frozen=True)
