@@ -1,7 +1,7 @@
 import pytest
 
 from counter_os.domain.entities.counter import Counter
-from counter_os.domain.value_objects import Count
+from counter_os.domain.value_objects.count import Count
 
 
 def test_Counter_init_requires_Count_value_object():

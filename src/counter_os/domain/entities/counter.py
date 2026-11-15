@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from counter_os.domain.value_objects import Count
+from counter_os.domain.value_objects.count import Count
 
 
 @dataclass()
