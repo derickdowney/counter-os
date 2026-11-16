@@ -3,6 +3,8 @@ from unittest.mock import Mock
 
 import pytest
 
+from counter_os.application.common.error import Error
+from counter_os.application.common.error_codes import ErrorCode
 from counter_os.application.common.result import Result
 from counter_os.application.dtos.counter_response import CounterResponse
 from counter_os.application.dtos.counter_set_request import CounterSetRequest
@@ -33,3 +35,15 @@ def test_CounterSetUseCase_sets_counter_to_requested_value():
     assert result.is_success
     assert isinstance(result.value, CounterResponse)
     assert result.value.count == 50
+
+
+def test_CounterSetUseCase_raises_error_when_set_to_negative_number():
+    counter_repo: Mock = Mock(spec=CounterRepository)
+    counter_repo.get.return_value = Counter(Count(0))
+
+    use_case: CounterSetUseCase = CounterSetUseCase(counter_repo)
+    request: CounterSetRequest = CounterSetRequest(-1)
+    result: Result = use_case.execute(request)
+    assert result.is_failure
+    assert isinstance(result.error, Error)
+    assert result.error.code == ErrorCode.COUNT_CANNOT_BE_NEGATIVE

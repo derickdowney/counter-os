@@ -19,6 +19,10 @@ class CounterSetUseCase:
 
     def execute(self, request: CounterSetRequest) -> Result:
         counter: Counter = self.counter_repository.get()
-        params: dict[str, Any] = request.to_execution_params()
-        counter.count = params["count"]
-        return Result.success(CounterResponse.from_entity(counter))
+
+        try:
+            params: dict[str, Any] = request.to_execution_params()
+            counter.count = params["count"]
+            return Result.success(CounterResponse.from_entity(counter))
+        except CountCannotBeNegative:
+            return Result.failure(Error.count_cannot_be_negative(request.count))
