@@ -1,5 +1,7 @@
 from unittest.mock import Mock
 
+import pytest
+
 from counter_os.application.common.error_codes import ErrorCode
 from counter_os.application.common.result import Result
 from counter_os.application.use_cases.counter_decrement_use_case import (
@@ -8,6 +10,12 @@ from counter_os.application.use_cases.counter_decrement_use_case import (
 from counter_os.domain.entities.counter import Counter
 from counter_os.domain.repositories.counter_repository import CounterRepository
 from counter_os.domain.value_objects.count import Count
+
+
+def test_CounterDecrementUseCase_is_immutable(counter_repository):
+    use_case: CounterDecrementUseCase = CounterDecrementUseCase(counter_repository)
+    with pytest.raises(AttributeError):
+        use_case.counter_repository = counter_repository
 
 
 def test_CounterDecrementUseCase_execute_success():
@@ -29,7 +37,7 @@ def test_CounterDecrementUseCase_execute_decrement_below_zero():
     use_case: CounterDecrementUseCase = CounterDecrementUseCase(counter_repo)
     result: Result = use_case.execute()
 
-    assert not result.is_success
+    assert result.is_failure
     assert result.error is not None
     assert result.error.code == ErrorCode.COUNT_CANNOT_BE_NEGATIVE
     assert (

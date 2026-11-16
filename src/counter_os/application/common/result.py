@@ -22,3 +22,7 @@ class Result:
     @property
     def is_success(self) -> bool:
         return self.error is None
+
+    @property
+    def is_failure(self) -> bool:
+        return not self.is_success
