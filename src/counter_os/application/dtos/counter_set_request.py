@@ -9,7 +9,12 @@ class CounterSetRequest:
     count: int
 
     def __post_init__(self) -> None:
-        """Validate request data"""
+        """Validate request data.
+
+        Note that Domain errors are raised during to_execution_params(),
+        so this is not the place to enforce Domain invariants.
+        Instead this is just the place to ensure incoming data is formatted
+        and structured correctly."""
         if type(self.count) != int:
             raise ValueError("Count must be an integer")
 
