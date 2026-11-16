@@ -14,3 +14,8 @@ def test_CounterSetRequest_is_immutable():
     request: CounterSetRequest = CounterSetRequest(1)
     with pytest.raises(FrozenInstanceError):
         request.count = 2
+
+
+def test_CounterSetRequest_raises_ValueError_if_init_with_non_int():
+    with pytest.raises(ValueError):
+        CounterSetRequest("hello")
