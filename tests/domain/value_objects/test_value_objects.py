@@ -2,7 +2,10 @@ from dataclasses import FrozenInstanceError
 
 import pytest
 
-from counter_os.domain.exceptions import CountCannotBeNegative
+from counter_os.domain.exceptions import (
+    CountCannotBeGreaterThan100,
+    CountCannotBeNegative,
+)
 from counter_os.domain.value_objects.count import Count
 
 
@@ -25,3 +28,8 @@ def test_Count_raises_CountCannotBeNegative_when_less_than_zero():
 def test_Count_raises_TypeError_when_init_with_boolean():
     with pytest.raises(TypeError):
         Count(True)
+
+
+def test_Count_raises_CountCannotBeGreaterThan100_when_greater_than_100():
+    with pytest.raises(CountCannotBeGreaterThan100):
+        Count(101)

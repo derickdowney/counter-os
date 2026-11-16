@@ -4,12 +4,12 @@ from counter_os.infrastructure.memory_counter_repository import MemoryCounterRep
 
 
 def test_MemoryCounterRepository_saves_to_and_gets_from_memory(counter):
-    counter.count = Count(123)
+    counter.count = Count(50)
     counter_repository: MemoryCounterRepository = MemoryCounterRepository(counter)
     counter_repository.save(counter)
     saved_counter: Counter = counter_repository.get()
-    assert saved_counter.count == Count(123)
+    assert saved_counter.count == Count(50)
 
     # Ensure counter stored as deepcopy, not as reference
-    counter.count = Count(456)
-    assert saved_counter.count == Count(123)
+    counter.count = Count(100)
+    assert saved_counter.count == Count(50)

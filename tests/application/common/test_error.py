@@ -22,3 +22,11 @@ def test_Error_count_cannot_be_negative():
     error: Error = Error.count_cannot_be_negative(-1)
     assert error.code == ErrorCode.COUNT_CANNOT_BE_NEGATIVE
     assert error.message == "-1 is a negative value and count cannot be negative."
+
+
+def test_Error_count_cannot_be_greater_than_100():
+    error: Error = Error.count_cannot_be_greater_than_100(101)
+    assert error.code == ErrorCode.COUNT_CANNOT_BE_GREATER_THAN_100
+    assert (
+        error.message == "101 is greater than 100 and count cannot be greater than 100."
+    )
