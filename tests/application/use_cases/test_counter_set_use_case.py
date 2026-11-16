@@ -47,3 +47,15 @@ def test_CounterSetUseCase_raises_error_when_set_to_negative_number():
     assert result.is_failure
     assert isinstance(result.error, Error)
     assert result.error.code == ErrorCode.COUNT_CANNOT_BE_NEGATIVE
+
+
+def test_CounterSetUseCase_raises_error_when_set_to_value_greater_than_100():
+    counter_repo: Mock = Mock(spec=CounterRepository)
+    counter_repo.get.return_value = Counter(Count(0))
+
+    use_case: CounterSetUseCase = CounterSetUseCase(counter_repo)
+    request: CounterSetRequest = CounterSetRequest(101)
+    result: Result = use_case.execute(request)
+    assert result.is_failure
+    assert isinstance(result.error, Error)
+    assert result.error.code == ErrorCode.COUNT_CANNOT_BE_GREATER_THAN_100

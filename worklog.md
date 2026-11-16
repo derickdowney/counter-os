@@ -1,5 +1,8 @@
 # TODO
 - Need to implement FileCounterRepository and add "COUNTER_NOT_FOUND" error
+- Need to implement an "optional service" into the CounterSetUseCase.
+    - Give a feature to the web UI that the CLI doesn't have.
+    - Use Sam Keen's "optional integration" on page 129
 
 
 # Project Setup Worklog

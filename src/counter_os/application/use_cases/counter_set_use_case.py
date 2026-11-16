@@ -26,3 +26,5 @@ class CounterSetUseCase:
             return Result.success(CounterResponse.from_entity(counter))
         except CountCannotBeNegative:
             return Result.failure(Error.count_cannot_be_negative(request.count))
+        except CountCannotBeGreaterThan100:
+            return Result.failure(Error.count_cannot_be_greater_than_100(request.count))
