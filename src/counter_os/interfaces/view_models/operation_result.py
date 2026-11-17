@@ -31,3 +31,15 @@ class OperationResult[T]:
     @property
     def is_failure(self) -> bool:
         return self._error is not None and self._success is None
+
+    @property
+    def success(self) -> T:
+        if self._success is None:
+            raise ValueError("Cannot access success value on error result")
+        return self._success
+
+    @property
+    def error(self) -> ErrorViewModel:
+        if self._error is None:
+            raise ValueError("Cannot access error value on success result")
+        return self._error
