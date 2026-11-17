@@ -35,6 +35,10 @@ class CounterController:
             )
             return OperationResult.fail(error_vm.message, error_vm.code)
 
+        # I think the only way this can get triggered is if we try to call
+        # result.sucess or result.error on OperationResult and there is no
+        # success or error. All other domain errors will be captured in the
+        # error_vm above!
         except ValueError as e:
             error_vm: ErrorViewModel = self.presenter.present_error(
                 str(e), "VALIDATION_ERROR"

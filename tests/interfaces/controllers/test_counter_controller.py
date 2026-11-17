@@ -88,3 +88,34 @@ def test_CounterController_handle_increment_success_path(mock_counter_controller
     assert result.is_success
     assert isinstance(result.success, CounterViewModel)
     assert result.success.count == 1
+
+
+def test_CounterController_handle_increment_error_greater_than_100_path(
+    mock_counter_increment_use_case,
+    mock_counter_decrement_use_case,
+    mock_counter_set_use_case,
+    mock_counter_presenter,
+):
+    # Arrange
+    increment_error: Error = Error.count_cannot_be_greater_than_100(101)
+    increment_fail_result: Result = Result.failure(increment_error)
+    mock_counter_increment_use_case.result = increment_fail_result
+
+    counter_controller: CounterController = CounterController(
+        mock_counter_increment_use_case,
+        mock_counter_decrement_use_case,
+        mock_counter_set_use_case,
+        mock_counter_presenter,
+    )
+
+    # Act
+    result: OperationResult[CounterViewModel] = counter_controller.handle_increment()
+
+    # Assert
+    assert result.is_failure
+    assert isinstance(result.error, ErrorViewModel)
+    assert (
+        result.error.message
+        == "101 is greater than 100 and count cannot be greater than 100."
+    )
+    assert result.error.code == "COUNT_CANNOT_BE_GREATER_THAN_100"
