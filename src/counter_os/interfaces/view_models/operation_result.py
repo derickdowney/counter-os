@@ -14,7 +14,12 @@ class OperationResult[T]:
         ):
             raise ValueError("Either success or error must be provided, but not both")
         self._success = success
+        self._error = error
 
     @classmethod
     def succeed(cls, value: T):
         return cls(success=value)
+
+    @classmethod
+    def fail(cls, message: str, code: str | None = None):
+        return cls(error=ErrorViewModel(message, code))
