@@ -13,3 +13,8 @@ class OperationResult[T]:
             success is not None and error is not None
         ):
             raise ValueError("Either success or error must be provided, but not both")
+        self._success = success
+
+    @classmethod
+    def succeed(cls, value: T):
+        return cls(success=value)

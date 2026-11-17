@@ -13,3 +13,8 @@ def test_OperationResult_init_requires_either_success_or_error_but_never_both():
         OperationResult()
     with pytest.raises(ValueError):
         OperationResult(success=success, error=error_vm)
+
+
+def test_OperationResult_succeed_init_assigns_arg_to_success_field():
+    op_result: OperationResult[str] = OperationResult.succeed("success")
+    assert op_result._success == "success"
