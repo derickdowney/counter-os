@@ -27,3 +27,15 @@ def test_OperationResult_fail_init_assigns_args_to_error_view_model_field():
     assert op_result._error.message == "error msg"
     assert op_result._error.code is None
     assert op_result._success is None
+
+
+def test_OperationResult_property_is_success():
+    op_result: OperationResult[str] = OperationResult.succeed("success")
+    assert op_result.is_success
+    assert not op_result.is_failure
+
+
+def test_OperationResult_property_is_failure():
+    op_result: OperationResult[str] = OperationResult.fail("error")
+    assert op_result.is_failure
+    assert not op_result.is_success

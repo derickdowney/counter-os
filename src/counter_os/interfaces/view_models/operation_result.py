@@ -17,9 +17,17 @@ class OperationResult[T]:
         self._error = error
 
     @classmethod
-    def succeed(cls, value: T):
+    def succeed(cls, value: T) -> OperationResult:
         return cls(success=value)
 
     @classmethod
-    def fail(cls, message: str, code: str | None = None):
+    def fail(cls, message: str, code: str | None = None) -> OperationResult:
         return cls(error=ErrorViewModel(message, code))
+
+    @property
+    def is_success(self) -> bool:
+        return self._success is not None and self._error is None
+
+    @property
+    def is_failure(self) -> bool:
+        return self._error is not None and self._success is None
