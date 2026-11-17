@@ -14,14 +14,14 @@ class Error:
     details: dict[str, Any] | None = None
 
     @classmethod
-    def count_cannot_be_negative(cls, value: int) -> Self:
+    def count_cannot_be_negative(cls, value: int) -> Error:
         return cls(
             code=ErrorCode.COUNT_CANNOT_BE_NEGATIVE,
             message=f"{value} is a negative value and count cannot be negative.",
         )
 
     @classmethod
-    def count_cannot_be_greater_than_100(cls, value: int) -> Self:
+    def count_cannot_be_greater_than_100(cls, value: int) -> Error:
         return cls(
             code=ErrorCode.COUNT_CANNOT_BE_GREATER_THAN_100,
             message=f"{value} is greater than 100 and count cannot be greater than 100.",
