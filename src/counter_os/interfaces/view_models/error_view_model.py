@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 
-@dataclass
+@dataclass(frozen=True)
 class ErrorViewModel:
     """Represents an error with an optional error code."""
 
