@@ -1,7 +1,7 @@
 import pytest
 
+from counter_os.interfaces.operation_result import OperationResult
 from counter_os.interfaces.view_models.error_view_model import ErrorViewModel
-from counter_os.interfaces.view_models.operation_result import OperationResult
 
 
 def test_OperationResult_init_requires_either_success_or_error_but_never_both():

@@ -11,9 +11,9 @@ from counter_os.application.result import (
 from counter_os.domain.entities.counter import Counter
 from counter_os.domain.value_objects.count import Count
 from counter_os.interfaces.controllers.counter_controller import CounterController
+from counter_os.interfaces.operation_result import OperationResult
 from counter_os.interfaces.view_models.counter_view_model import CounterViewModel
 from counter_os.interfaces.view_models.error_view_model import ErrorViewModel
-from counter_os.interfaces.view_models.operation_result import OperationResult
 
 
 @pytest.fixture

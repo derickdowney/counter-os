@@ -8,10 +8,10 @@ from counter_os.application.use_cases.counter_increment_use_case import (
     CounterIncrementUseCase,
 )
 from counter_os.application.use_cases.counter_set_use_case import CounterSetUseCase
+from counter_os.interfaces.operation_result import OperationResult
 from counter_os.interfaces.presenters.counter_presenter import CounterPresenter
 from counter_os.interfaces.view_models.counter_view_model import CounterViewModel
 from counter_os.interfaces.view_models.error_view_model import ErrorViewModel
-from counter_os.interfaces.view_models.operation_result import OperationResult
 
 
 @dataclass
