@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from counter_os.application.dtos.counter_set_request import CounterSetRequest
+from counter_os.application.dtos.error_response import ErrorCode, ErrorResponse
 from counter_os.application.result import Error, Result, Success
 from counter_os.application.use_cases.counter_decrement_use_case import (
     CounterDecrementUseCase,
@@ -58,3 +60,28 @@ class CounterController:
             return OperationError(error_vm)
 
         raise TypeError(f"Unexpected result type: {type(result).__name__}")
+
+    def handle_set(self, count: int) -> OperationResult:
+        try:
+            request: CounterSetRequest = CounterSetRequest(count)
+            result: Result = self.set_use_case.execute(request)
+
+            if isinstance(result, Success):
+                success_vm: CounterViewModel = self.presenter.present_counter_response(
+                    result.success_response
+                )
+                return OperationSuccess(success_vm)
+
+            if isinstance(result, Error):
+                error_vm: ErrorViewModel = self.presenter.present_error_response(
+                    result.error_response
+                )
+                return OperationError(error_vm)
+
+            raise TypeError(f"Unexpected result type: {type(result).__name__}")
+
+        except ValueError as e:
+            error_vm: ErrorViewModel = self.presenter.present_error_response(
+                ErrorResponse(message=str(e), code=ErrorCode.VALIDATION_ERROR)
+            )
+            return OperationError(error_vm)

@@ -144,3 +144,10 @@ def test_CounterController_handle_decrement_error_negative_value(
         == "-1 is a negative value and count cannot be negative."
     )
     assert op_result.error_vm.code == ErrorCode.COUNT_CANNOT_BE_NEGATIVE.name
+
+
+def test_CounterController_handle_set_success(counter_controller):
+    op_result: OperationResult = counter_controller.handle_set(50)
+    assert isinstance(op_result, OperationSuccess)
+    assert isinstance(op_result.success_vm, CounterViewModel)
+    assert op_result.success_vm.count == 50

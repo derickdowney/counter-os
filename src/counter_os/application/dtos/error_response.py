@@ -6,6 +6,7 @@ from typing import Any
 class ErrorCode(StrEnum):
     COUNT_CANNOT_BE_NEGATIVE = "COUNT_CANNOT_BE_NEGATIVE"
     COUNT_CANNOT_BE_GREATER_THAN_100 = "COUNT_CANNOT_BE_GREATER_THAN_100"
+    VALIDATION_ERROR = "VALIDATION_ERROR"
 
 
 @dataclass(frozen=True)
