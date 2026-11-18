@@ -1,28 +1,44 @@
 from dataclasses import dataclass
+from enum import StrEnum
 from typing import Any
 
-from counter_os.application.common.error import Error
+
+class ErrorCode(StrEnum):
+    COUNT_CANNOT_BE_NEGATIVE = "COUNT_CANNOT_BE_NEGATIVE"
+    COUNT_CANNOT_BE_GREATER_THAN_100 = "COUNT_CANNOT_BE_GREATER_THAN_100"
 
 
 @dataclass(frozen=True)
-class Result:
-    """Represents success or failure of a use case execution"""
+class Error:
+    """Standardized error information"""
 
-    value: Any = None
-    error: Error | None = None
-
-    @classmethod
-    def failure(cls, error: Error) -> Self:
-        return cls(error=error)
+    code: ErrorCode
+    message: str
+    details: dict[str, Any] | None = None
 
     @classmethod
-    def success(cls, value: Any) -> Self:
-        return cls(value=value)
+    def count_cannot_be_negative(cls, value: int) -> Error:
+        return cls(
+            code=ErrorCode.COUNT_CANNOT_BE_NEGATIVE,
+            message=f"{value} is a negative value and count cannot be negative.",
+        )
 
-    @property
-    def is_success(self) -> bool:
-        return self.error is None
+    @classmethod
+    def count_cannot_be_greater_than_100(cls, value: int) -> Error:
+        return cls(
+            code=ErrorCode.COUNT_CANNOT_BE_GREATER_THAN_100,
+            message=f"{value} is greater than 100 and count cannot be greater than 100.",
+        )
 
-    @property
-    def is_failure(self) -> bool:
-        return not self.is_success
+
+@dataclass(frozen=True)
+class Failure:
+    error: Error
+
+
+@dataclass(frozen=True)
+class Success[T]:
+    success: T
+
+
+type Result = Success | Failure

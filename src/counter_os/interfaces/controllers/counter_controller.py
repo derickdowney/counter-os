@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from counter_os.application.common.result import Result
+from counter_os.application.common.result import Result, Success
 from counter_os.application.use_cases.counter_decrement_use_case import (
     CounterDecrementUseCase,
 )
@@ -24,11 +24,11 @@ class CounterController:
     def handle_increment(self) -> OperationResult[CounterViewModel]:
         try:
             result: Result = self.increment_use_case.execute()
-            if result.is_success:
-                view_model: CounterViewModel = self.presenter.present_counter(
-                    result.value
+            if isinstance(result, Success):
+                success_vm: CounterViewModel = self.presenter.present_counter(
+                    result.success
                 )
-                return OperationResult.succeed(view_model)
+                return OperationResult.succeed(success_vm)
 
             error_vm: ErrorViewModel = self.presenter.present_error(
                 result.error.message, str(result.error.code.name)

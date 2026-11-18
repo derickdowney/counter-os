@@ -1,4 +1,7 @@
 # TODO
+- Fix inconsistencies between "result" and "operation result."
+    - sometimes called "success" or "value" and "failure" or "error"
+    - Decide on a pattern and make it consistent across both!
 - Need to implement FileCounterRepository and add "COUNTER_NOT_FOUND" error
 - Implement CounterHistoryPort in infrastructure using ORM database
 - Need to implement an "optional service" into the CounterSetUseCase.
