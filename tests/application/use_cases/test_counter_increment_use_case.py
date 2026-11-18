@@ -44,5 +44,5 @@ def test_CounterIncrementUseCase_increment_above_100():
     assert result.error_response.code == ErrorCode.COUNT_CANNOT_BE_GREATER_THAN_100
     assert (
         result.error_response.message
-        == "101 is greater than 100 and count cannot be greater than 100."
+        == "101 is greater than 100 and count cannot be greater than 100"
     )

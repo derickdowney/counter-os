@@ -113,7 +113,7 @@ def test_CounterController_handle_increment_error_greater_than_100_path(
     assert isinstance(op_result.error_vm, ErrorViewModel)
     assert (
         op_result.error_vm.message
-        == "101 is greater than 100 and count cannot be greater than 100."
+        == "101 is greater than 100 and count cannot be greater than 100"
     )
     assert op_result.error_vm.code == "COUNT_CANNOT_BE_GREATER_THAN_100"
 
@@ -141,7 +141,7 @@ def test_CounterController_handle_decrement_error_negative_value(
     assert isinstance(op_result.error_vm, ErrorViewModel)
     assert (
         op_result.error_vm.message
-        == "-1 is a negative value and count cannot be negative."
+        == "-1 is a negative value and count cannot be negative"
     )
     assert op_result.error_vm.code == ErrorCode.COUNT_CANNOT_BE_NEGATIVE.name
 
@@ -151,3 +151,14 @@ def test_CounterController_handle_set_success(counter_controller):
     assert isinstance(op_result, OperationSuccess)
     assert isinstance(op_result.success_vm, CounterViewModel)
     assert op_result.success_vm.count == 50
+
+
+def test_CounterController_handle_set_error_negative_value(counter_controller):
+    op_result: OperationResult = counter_controller.handle_set(-1)
+    assert isinstance(op_result, OperationError)
+    assert isinstance(op_result.error_vm, ErrorViewModel)
+    assert (
+        op_result.error_vm.message
+        == "-1 is a negative value and count cannot be negative"
+    )
+    assert op_result.error_vm.code == "COUNT_CANNOT_BE_NEGATIVE"

@@ -35,7 +35,7 @@ def test_Error_makes_error_message_and_code_accesible():
     result: Result = Error(ErrorResponse.count_cannot_be_negative(-1))
     assert (
         result.error_response.message
-        == "-1 is a negative value and count cannot be negative."
+        == "-1 is a negative value and count cannot be negative"
     )
     assert result.error_response.code == ErrorCode.COUNT_CANNOT_BE_NEGATIVE
 

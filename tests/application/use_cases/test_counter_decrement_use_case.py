@@ -44,5 +44,5 @@ def test_CounterDecrementUseCase_execute_decrement_below_zero():
     assert result.error_response.code == ErrorCode.COUNT_CANNOT_BE_NEGATIVE
     assert (
         result.error_response.message
-        == "-1 is a negative value and count cannot be negative."
+        == "-1 is a negative value and count cannot be negative"
     )
