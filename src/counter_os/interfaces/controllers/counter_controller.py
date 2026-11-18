@@ -9,7 +9,7 @@ from counter_os.application.use_cases.counter_increment_use_case import (
 )
 from counter_os.application.use_cases.counter_set_use_case import CounterSetUseCase
 from counter_os.interfaces.operation_result import (
-    OperationFailure,
+    OperationError,
     OperationResult,
     OperationSuccess,
 )
@@ -36,8 +36,25 @@ class CounterController:
 
         if isinstance(result, Error):
             error_vm: ErrorViewModel = self.presenter.present_error_response(
-                result.error_response.message, str(result.error_response.code.name)
+                result.error_response
             )
-            return OperationFailure(error_vm)
+            return OperationError(error_vm)
+
+        raise TypeError(f"Unexpected result type: {type(result).__name__}")
+
+    def handle_decrement(self) -> OperationResult:
+        result: Result = self.decrement_use_case.execute()
+
+        if isinstance(result, Success):
+            success_vm: CounterViewModel = self.presenter.present_counter_response(
+                result.success_response
+            )
+            return OperationSuccess(success_vm)
+
+        if isinstance(result, Error):
+            error_vm: ErrorViewModel = self.presenter.present_error_response(
+                result.error_response
+            )
+            return OperationError(error_vm)
 
         raise TypeError(f"Unexpected result type: {type(result).__name__}")

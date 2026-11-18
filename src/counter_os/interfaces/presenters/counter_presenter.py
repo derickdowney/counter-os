@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 from counter_os.application.dtos.counter_response import CounterResponse
+from counter_os.application.dtos.error_response import ErrorResponse
 from counter_os.interfaces.view_models.counter_view_model import CounterViewModel
 from counter_os.interfaces.view_models.error_view_model import ErrorViewModel
 
@@ -15,7 +16,5 @@ class CounterPresenter(ABC):
         pass
 
     @abstractmethod
-    def present_error_response(
-        self, error_msg: str, code: str | None = None
-    ) -> ErrorViewModel:
+    def present_error_response(self, error_response: ErrorResponse) -> ErrorViewModel:
         pass

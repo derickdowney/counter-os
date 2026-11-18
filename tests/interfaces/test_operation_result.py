@@ -3,7 +3,7 @@ from dataclasses import FrozenInstanceError
 import pytest
 
 from counter_os.interfaces.operation_result import (
-    OperationFailure,
+    OperationError,
     OperationResult,
     OperationSuccess,
 )
@@ -16,10 +16,10 @@ def test_OperationResult_can_capture_OperationSuccess_objects():
     assert isinstance(op_result, OperationSuccess)
 
 
-def test_OperationResult_can_capture_OperationFailure_objects():
+def test_OperationResult_can_capture_OperationError_objects():
     error_vm: ErrorViewModel = ErrorViewModel("message", "code")
-    op_result: OperationResult = OperationFailure(error_vm)
-    assert isinstance(op_result, OperationFailure)
+    op_result: OperationResult = OperationError(error_vm)
+    assert isinstance(op_result, OperationError)
 
 
 def test_OperationSuccess_init_with_no_args_raises_TypeError():
@@ -38,24 +38,24 @@ def test_OperationSuccess_is_immutable():
         op_success._success_vm = SuccessViewModel()
 
 
-def test_OperationFailure_init_with_no_args_raises_TypeError():
+def test_OperationError_init_with_no_args_raises_TypeError():
     with pytest.raises(TypeError):
-        OperationFailure()
+        OperationError()
 
 
-def test_OperationFailure_raises_TypeError_when_init_without_vm_class():
+def test_OperationError_raises_TypeError_when_init_without_vm_class():
     with pytest.raises(TypeError):
-        OperationFailure(0)
+        OperationError(0)
 
 
-def test_OperationFailure_is_immutable():
-    op_failure: OperationFailure = OperationFailure(ErrorViewModel("", ""))
+def test_OperationError_is_immutable():
+    op_failure: OperationError = OperationError(ErrorViewModel("", ""))
     with pytest.raises(FrozenInstanceError):
         op_failure._error_vm = ErrorViewModel("", "")
 
 
-def test_OperationFailure_error_view_model_message_and_code_are_accessible():
-    op_failure = OperationFailure(ErrorViewModel("some message", "some code"))
+def test_OperationError_error_view_model_message_and_code_are_accessible():
+    op_failure = OperationError(ErrorViewModel("some message", "some code"))
     assert op_failure.error_vm.message == "some message"
     assert op_failure.error_vm.code == "some code"
 

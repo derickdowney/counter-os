@@ -5,7 +5,7 @@ from counter_os.interfaces.view_models.success_view_model import SuccessViewMode
 
 
 @dataclass(frozen=True)
-class OperationFailure:
+class OperationError:
     _error_vm: ErrorViewModel  # TODO: change this to "_view_model"
 
     def __post_init__(self):
@@ -30,4 +30,4 @@ class OperationSuccess:
         return self._success_vm
 
 
-type OperationResult = OperationSuccess | OperationFailure
+type OperationResult = OperationSuccess | OperationError

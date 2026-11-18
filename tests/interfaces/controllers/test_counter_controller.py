@@ -2,7 +2,7 @@ import pytest
 
 from counter_os.application.dtos.counter_response import CounterResponse
 from counter_os.application.dtos.counter_set_request import CounterSetRequest
-from counter_os.application.dtos.error_response import ErrorResponse
+from counter_os.application.dtos.error_response import ErrorCode, ErrorResponse
 from counter_os.application.result import (
     Error,
     Result,
@@ -12,7 +12,7 @@ from counter_os.domain.entities.counter import Counter
 from counter_os.domain.value_objects.count import Count
 from counter_os.interfaces.controllers.counter_controller import CounterController
 from counter_os.interfaces.operation_result import (
-    OperationFailure,
+    OperationError,
     OperationResult,
     OperationSuccess,
 )
@@ -41,6 +41,8 @@ def mock_counter_decrement_use_case():
         def execute(self) -> Result:
             return self.result
 
+    return MockCounterDecrementUseCase()
+
 
 @pytest.fixture
 def mock_counter_set_use_case():
@@ -52,6 +54,8 @@ def mock_counter_set_use_case():
                 return Error(ErrorResponse.count_cannot_be_greater_than_100(101))
             return Success(CounterResponse(request.count))
 
+    return MockCounterSetUseCase()
+
 
 @pytest.fixture
 def mock_counter_presenter():
@@ -59,14 +63,14 @@ def mock_counter_presenter():
         def present_counter_response(self, counter_response: CounterResponse):
             return CounterViewModel(counter_response.count)
 
-        def present_error_response(self, error_msg: str, code: str | None = None):
-            return ErrorViewModel(error_msg, code)
+        def present_error_response(self, error_response: ErrorResponse):
+            return ErrorViewModel(error_response.message, error_response.code.name)
 
     return MockCounterPresenter()
 
 
 @pytest.fixture
-def mock_counter_controller(
+def counter_controller(
     mock_counter_increment_use_case,
     mock_counter_decrement_use_case,
     mock_counter_set_use_case,
@@ -85,39 +89,58 @@ def test_CounterController_init_requires_counter_use_cases():
         CounterController()
 
 
-def test_CounterController_handle_increment_success_path(mock_counter_controller):
-    op_result: OperationResult = mock_counter_controller.handle_increment()
+def test_CounterController_handle_increment_success_path(counter_controller):
+    op_result: OperationResult = counter_controller.handle_increment()
     assert isinstance(op_result, OperationSuccess)
     assert isinstance(op_result.success_vm, CounterViewModel)
     assert op_result.success_vm.count == 1
 
 
 def test_CounterController_handle_increment_error_greater_than_100_path(
+    counter_controller,
     mock_counter_increment_use_case,
-    mock_counter_decrement_use_case,
-    mock_counter_set_use_case,
-    mock_counter_presenter,
 ):
     # Arrange
-    increment_error = ErrorResponse.count_cannot_be_greater_than_100(101)
-    increment_fail_result: Result = Error(increment_error)
-    mock_counter_increment_use_case.result = increment_fail_result
-
-    counter_controller: CounterController = CounterController(
-        mock_counter_increment_use_case,
-        mock_counter_decrement_use_case,
-        mock_counter_set_use_case,
-        mock_counter_presenter,
-    )
+    result: Result = Error(ErrorResponse.count_cannot_be_greater_than_100(101))
+    mock_counter_increment_use_case.result = result
+    counter_controller.increment_use_case = mock_counter_increment_use_case
 
     # Act
     op_result: OperationResult = counter_controller.handle_increment()
 
     # Assert
-    assert isinstance(op_result, OperationFailure)
+    assert isinstance(op_result, OperationError)
     assert isinstance(op_result.error_vm, ErrorViewModel)
     assert (
         op_result.error_vm.message
         == "101 is greater than 100 and count cannot be greater than 100."
     )
     assert op_result.error_vm.code == "COUNT_CANNOT_BE_GREATER_THAN_100"
+
+
+def test_CounterController_handle_decrement_success(counter_controller):
+    op_result: OperationResult = counter_controller.handle_decrement()
+    assert isinstance(op_result, OperationSuccess)
+    assert isinstance(op_result.success_vm, CounterViewModel)
+    assert op_result.success_vm.count == 0
+
+
+def test_CounterController_handle_decrement_error_negative_value(
+    counter_controller, mock_counter_decrement_use_case
+):
+    # Arrange
+    result: Result = Error(ErrorResponse.count_cannot_be_negative(-1))
+    mock_counter_decrement_use_case.result = result
+    counter_controller.decrement_use_case = mock_counter_decrement_use_case
+
+    # Act
+    op_result: OperationResult = counter_controller.handle_decrement()
+
+    # Assert
+    assert isinstance(op_result, OperationError)
+    assert isinstance(op_result.error_vm, ErrorViewModel)
+    assert (
+        op_result.error_vm.message
+        == "-1 is a negative value and count cannot be negative."
+    )
+    assert op_result.error_vm.code == ErrorCode.COUNT_CANNOT_BE_NEGATIVE.name
