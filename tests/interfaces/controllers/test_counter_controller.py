@@ -173,3 +173,11 @@ def test_CounterController_handle_set_error_greater_than_100(counter_controller)
         == "101 is greater than 100 and count cannot be greater than 100"
     )
     assert op_result.error_vm.code == "COUNT_CANNOT_BE_GREATER_THAN_100"
+
+
+def test_CounterController_handle_set_error_not_an_integer(counter_controller):
+    op_result: OperationResult = counter_controller.handle_set("hello")
+    assert isinstance(op_result, OperationError)
+    assert isinstance(op_result.error_vm, ErrorViewModel)
+    assert op_result.error_vm.message == "Count must be an integer"
+    assert op_result.error_vm.code == "VALIDATION_ERROR"
