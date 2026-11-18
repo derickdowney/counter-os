@@ -2,9 +2,9 @@ import pytest
 
 from counter_os.application.dtos.counter_response import CounterResponse
 from counter_os.application.dtos.counter_set_request import CounterSetRequest
+from counter_os.application.dtos.error_response import ErrorCode, ErrorResponse
 from counter_os.application.result import (
     Error,
-    Failure,
     Result,
     Success,
 )
@@ -47,10 +47,10 @@ def mock_counter_set_use_case():
     class MockCounterSetUseCase:
         def execute(self, request: CounterSetRequest) -> Result:
             if request.count == -1:
-                return Failure(Error.count_cannot_be_negative(-1))
+                return Error(ErrorResponse.count_cannot_be_negative(-1))
             if request.count == 101:
-                return Failure(Error.count_cannot_be_greater_than_100(101))
-            return Success(request.count)
+                return Error(ErrorResponse.count_cannot_be_greater_than_100(101))
+            return Success(CounterResponse(request.count))
 
 
 @pytest.fixture
@@ -99,8 +99,8 @@ def test_CounterController_handle_increment_error_greater_than_100_path(
     mock_counter_presenter,
 ):
     # Arrange
-    increment_error: Error = Error.count_cannot_be_greater_than_100(101)
-    increment_fail_result: Result = Failure(increment_error)
+    increment_error = ErrorResponse.count_cannot_be_greater_than_100(101)
+    increment_fail_result: Result = Error(increment_error)
     mock_counter_increment_use_case.result = increment_fail_result
 
     counter_controller: CounterController = CounterController(

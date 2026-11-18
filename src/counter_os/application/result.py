@@ -2,43 +2,34 @@ from dataclasses import dataclass
 from enum import StrEnum
 from typing import Any
 
-
-class ErrorCode(StrEnum):
-    COUNT_CANNOT_BE_NEGATIVE = "COUNT_CANNOT_BE_NEGATIVE"
-    COUNT_CANNOT_BE_GREATER_THAN_100 = "COUNT_CANNOT_BE_GREATER_THAN_100"
+from counter_os.application.dtos.error_response import ErrorResponse
+from counter_os.application.dtos.success_response import SuccessResponse
 
 
 @dataclass(frozen=True)
 class Error:
-    """Standardized error information"""
+    _error: ErrorResponse
 
-    code: ErrorCode
-    message: str
-    details: dict[str, Any] | None = None
+    def __post_init__(self):
+        if not isinstance(self._error, ErrorResponse):
+            raise TypeError("Argument must be or extend off ErrorResponse class")
 
-    @classmethod
-    def count_cannot_be_negative(cls, value: int) -> Error:
-        return cls(
-            code=ErrorCode.COUNT_CANNOT_BE_NEGATIVE,
-            message=f"{value} is a negative value and count cannot be negative.",
-        )
-
-    @classmethod
-    def count_cannot_be_greater_than_100(cls, value: int) -> Error:
-        return cls(
-            code=ErrorCode.COUNT_CANNOT_BE_GREATER_THAN_100,
-            message=f"{value} is greater than 100 and count cannot be greater than 100.",
-        )
+    @property
+    def error(self):
+        return self._error
 
 
 @dataclass(frozen=True)
-class Failure:
-    error: Error
+class Success:
+    _success: SuccessResponse
+
+    def __post_init__(self):
+        if not isinstance(self._success, SuccessResponse):
+            raise TypeError("Argument must extend off SuccessResponse class")
+
+    @property
+    def success(self):
+        return self._success
 
 
-@dataclass(frozen=True)
-class Success[T]:
-    success: T
-
-
-type Result = Success | Failure
+type Result = Success | Error

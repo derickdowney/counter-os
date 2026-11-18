@@ -5,10 +5,9 @@ import pytest
 
 from counter_os.application.dtos.counter_response import CounterResponse
 from counter_os.application.dtos.counter_set_request import CounterSetRequest
+from counter_os.application.dtos.error_response import ErrorCode, ErrorResponse
 from counter_os.application.result import (
     Error,
-    ErrorCode,
-    Failure,
     Result,
     Success,
 )
@@ -48,8 +47,8 @@ def test_CounterSetUseCase_raises_error_when_set_to_negative_number():
     use_case: CounterSetUseCase = CounterSetUseCase(counter_repo)
     request: CounterSetRequest = CounterSetRequest(-1)
     result: Result = use_case.execute(request)
-    assert isinstance(result, Failure)
-    assert isinstance(result.error, Error)
+    assert isinstance(result, Error)
+    assert isinstance(result.error, ErrorResponse)
     assert result.error.code == ErrorCode.COUNT_CANNOT_BE_NEGATIVE
 
 
@@ -60,6 +59,6 @@ def test_CounterSetUseCase_raises_error_when_set_to_value_greater_than_100():
     use_case: CounterSetUseCase = CounterSetUseCase(counter_repo)
     request: CounterSetRequest = CounterSetRequest(101)
     result: Result = use_case.execute(request)
-    assert isinstance(result, Failure)
-    assert isinstance(result.error, Error)
+    assert isinstance(result, Error)
+    assert isinstance(result.error, ErrorResponse)
     assert result.error.code == ErrorCode.COUNT_CANNOT_BE_GREATER_THAN_100

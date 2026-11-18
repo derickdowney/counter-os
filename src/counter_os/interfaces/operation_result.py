@@ -6,7 +6,7 @@ from counter_os.interfaces.view_models.success_view_model import SuccessViewMode
 
 @dataclass(frozen=True)
 class OperationFailure:
-    _error_vm: ErrorViewModel
+    _error_vm: ErrorViewModel  # TODO: change this to "_view_model"
 
     def __post_init__(self):
         if not isinstance(self._error_vm, ErrorViewModel):

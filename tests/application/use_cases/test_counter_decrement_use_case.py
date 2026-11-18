@@ -2,7 +2,9 @@ from unittest.mock import Mock
 
 import pytest
 
-from counter_os.application.result import ErrorCode, Failure, Result, Success
+from counter_os.application.dtos.counter_response import CounterResponse
+from counter_os.application.dtos.error_response import ErrorCode, ErrorResponse
+from counter_os.application.result import Error, Result, Success
 from counter_os.application.use_cases.counter_decrement_use_case import (
     CounterDecrementUseCase,
 )
@@ -25,7 +27,8 @@ def test_CounterDecrementUseCase_execute_success():
     result: Result = use_case.execute()
 
     assert isinstance(result, Success)
-    assert result.success == Counter(Count(0))
+    assert isinstance(result.success, CounterResponse)
+    assert result.success.count == 0
     counter_repo.save.assert_called_once_with(Counter(Count(0)))
 
 
@@ -36,8 +39,8 @@ def test_CounterDecrementUseCase_execute_decrement_below_zero():
     use_case: CounterDecrementUseCase = CounterDecrementUseCase(counter_repo)
     result: Result = use_case.execute()
 
-    assert isinstance(result, Failure)
-    assert result.error is not None
+    assert isinstance(result, Error)
+    assert isinstance(result.error, ErrorResponse)
     assert result.error.code == ErrorCode.COUNT_CANNOT_BE_NEGATIVE
     assert (
         result.error.message == "-1 is a negative value and count cannot be negative."
