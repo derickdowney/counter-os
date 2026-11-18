@@ -2,7 +2,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from counter_os.application.common.result import ErrorCode, Failure, Result, Success
+from counter_os.application.result import ErrorCode, Failure, Result, Success
 from counter_os.application.use_cases.counter_increment_use_case import (
     CounterIncrementUseCase,
 )

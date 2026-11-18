@@ -3,15 +3,15 @@ from unittest.mock import Mock
 
 import pytest
 
-from counter_os.application.common.result import (
+from counter_os.application.dtos.counter_response import CounterResponse
+from counter_os.application.dtos.counter_set_request import CounterSetRequest
+from counter_os.application.result import (
     Error,
     ErrorCode,
     Failure,
     Result,
     Success,
 )
-from counter_os.application.dtos.counter_response import CounterResponse
-from counter_os.application.dtos.counter_set_request import CounterSetRequest
 from counter_os.application.use_cases.counter_set_use_case import CounterSetUseCase
 from counter_os.domain.entities.counter import Counter
 from counter_os.domain.repositories.counter_repository import CounterRepository

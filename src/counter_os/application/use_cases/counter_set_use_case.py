@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 from typing import Any
 
-from counter_os.application.common.result import Error, Failure, Result, Success
 from counter_os.application.dtos.counter_response import CounterResponse
 from counter_os.application.dtos.counter_set_request import CounterSetRequest
+from counter_os.application.result import Error, Failure, Result, Success
 from counter_os.domain.entities.counter import Counter
 from counter_os.domain.exceptions import (
     CountCannotBeGreaterThan100,

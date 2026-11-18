@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from counter_os.application.common.result import Result, Success
+from counter_os.application.result import Result, Success
 from counter_os.application.use_cases.counter_decrement_use_case import (
     CounterDecrementUseCase,
 )

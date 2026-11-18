@@ -3,7 +3,7 @@ from enum import StrEnum
 
 import pytest
 
-from counter_os.application.common.result import (
+from counter_os.application.result import (
     Error,
     ErrorCode,
     Failure,

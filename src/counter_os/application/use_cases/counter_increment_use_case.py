@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from counter_os.application.common.result import Error, Failure, Result, Success
+from counter_os.application.result import Error, Failure, Result, Success
 from counter_os.domain.entities.counter import Counter
 from counter_os.domain.exceptions import CountCannotBeGreaterThan100
 from counter_os.domain.repositories.counter_repository import CounterRepository
