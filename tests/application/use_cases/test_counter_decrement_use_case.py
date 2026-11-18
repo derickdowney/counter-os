@@ -27,8 +27,8 @@ def test_CounterDecrementUseCase_execute_success():
     result: Result = use_case.execute()
 
     assert isinstance(result, Success)
-    assert isinstance(result.success, CounterResponse)
-    assert result.success.count == 0
+    assert isinstance(result.success_response, CounterResponse)
+    assert result.success_response.count == 0
     counter_repo.save.assert_called_once_with(Counter(Count(0)))
 
 
@@ -40,8 +40,9 @@ def test_CounterDecrementUseCase_execute_decrement_below_zero():
     result: Result = use_case.execute()
 
     assert isinstance(result, Error)
-    assert isinstance(result.error, ErrorResponse)
-    assert result.error.code == ErrorCode.COUNT_CANNOT_BE_NEGATIVE
+    assert isinstance(result.error_response, ErrorResponse)
+    assert result.error_response.code == ErrorCode.COUNT_CANNOT_BE_NEGATIVE
     assert (
-        result.error.message == "-1 is a negative value and count cannot be negative."
+        result.error_response.message
+        == "-1 is a negative value and count cannot be negative."
     )

@@ -2,7 +2,7 @@ import pytest
 
 from counter_os.application.dtos.counter_response import CounterResponse
 from counter_os.application.dtos.counter_set_request import CounterSetRequest
-from counter_os.application.dtos.error_response import ErrorCode, ErrorResponse
+from counter_os.application.dtos.error_response import ErrorResponse
 from counter_os.application.result import (
     Error,
     Result,
@@ -56,10 +56,10 @@ def mock_counter_set_use_case():
 @pytest.fixture
 def mock_counter_presenter():
     class MockCounterPresenter:
-        def present_counter(self, counter_response: CounterResponse):
+        def present_counter_response(self, counter_response: CounterResponse):
             return CounterViewModel(counter_response.count)
 
-        def present_error(self, error_msg: str, code: str | None = None):
+        def present_error_response(self, error_msg: str, code: str | None = None):
             return ErrorViewModel(error_msg, code)
 
     return MockCounterPresenter()

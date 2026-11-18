@@ -36,8 +36,8 @@ def test_CounterSetUseCase_successfully_sets_counter_to_requested_value():
     request: CounterSetRequest = CounterSetRequest(50)
     result: Result = use_case.execute(request)
     assert isinstance(result, Success)
-    assert isinstance(result.success, CounterResponse)
-    assert result.success.count == 50
+    assert isinstance(result.success_response, CounterResponse)
+    assert result.success_response.count == 50
 
 
 def test_CounterSetUseCase_raises_error_when_set_to_negative_number():
@@ -48,8 +48,8 @@ def test_CounterSetUseCase_raises_error_when_set_to_negative_number():
     request: CounterSetRequest = CounterSetRequest(-1)
     result: Result = use_case.execute(request)
     assert isinstance(result, Error)
-    assert isinstance(result.error, ErrorResponse)
-    assert result.error.code == ErrorCode.COUNT_CANNOT_BE_NEGATIVE
+    assert isinstance(result.error_response, ErrorResponse)
+    assert result.error_response.code == ErrorCode.COUNT_CANNOT_BE_NEGATIVE
 
 
 def test_CounterSetUseCase_raises_error_when_set_to_value_greater_than_100():
@@ -60,5 +60,5 @@ def test_CounterSetUseCase_raises_error_when_set_to_value_greater_than_100():
     request: CounterSetRequest = CounterSetRequest(101)
     result: Result = use_case.execute(request)
     assert isinstance(result, Error)
-    assert isinstance(result.error, ErrorResponse)
-    assert result.error.code == ErrorCode.COUNT_CANNOT_BE_GREATER_THAN_100
+    assert isinstance(result.error_response, ErrorResponse)
+    assert result.error_response.code == ErrorCode.COUNT_CANNOT_BE_GREATER_THAN_100

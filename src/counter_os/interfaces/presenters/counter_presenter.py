@@ -9,9 +9,13 @@ class CounterPresenter(ABC):
     """Abstract base presenter for counter-related output."""
 
     @abstractmethod
-    def present_counter(self, counter_response: CounterResponse) -> CounterViewModel:
+    def present_counter_response(
+        self, counter_response: CounterResponse
+    ) -> CounterViewModel:
         pass
 
     @abstractmethod
-    def present_error(self, error_msg: str, code: str | None = None) -> ErrorViewModel:
+    def present_error_response(
+        self, error_msg: str, code: str | None = None
+    ) -> ErrorViewModel:
         pass

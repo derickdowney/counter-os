@@ -27,8 +27,8 @@ def test_CounterIncrementUseCase_execute_success():
     result: Result = use_case.execute()
 
     assert isinstance(result, Success)
-    assert isinstance(result.success, CounterResponse)
-    assert result.success.count == 1
+    assert isinstance(result.success_response, CounterResponse)
+    assert result.success_response.count == 1
     counter_repo.save.assert_called_once_with(Counter(Count(1)))
 
 
@@ -40,9 +40,9 @@ def test_CounterIncrementUseCase_increment_above_100():
     result: Result = use_case.execute()
 
     assert isinstance(result, Error)
-    assert isinstance(result.error, ErrorResponse)
-    assert result.error.code == ErrorCode.COUNT_CANNOT_BE_GREATER_THAN_100
+    assert isinstance(result.error_response, ErrorResponse)
+    assert result.error_response.code == ErrorCode.COUNT_CANNOT_BE_GREATER_THAN_100
     assert (
-        result.error.message
+        result.error_response.message
         == "101 is greater than 100 and count cannot be greater than 100."
     )

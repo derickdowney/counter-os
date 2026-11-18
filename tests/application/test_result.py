@@ -67,22 +67,23 @@ def test_Error_init_requires_error_arg():
 def test_Error_makes_error_message_and_code_accesible():
     result: Result = Error(ErrorResponse.count_cannot_be_negative(-1))
     assert (
-        result.error.message == "-1 is a negative value and count cannot be negative."
+        result.error_response.message
+        == "-1 is a negative value and count cannot be negative."
     )
-    assert result.error.code == ErrorCode.COUNT_CANNOT_BE_NEGATIVE
+    assert result.error_response.code == ErrorCode.COUNT_CANNOT_BE_NEGATIVE
 
 
 def test_Result_Failure_is_immutable():
     result: Result = Error(ErrorResponse.count_cannot_be_negative(-1))
     error: ErrorResponse = ErrorResponse.count_cannot_be_greater_than_100(101)
     with pytest.raises(FrozenInstanceError):
-        result._error = error
+        result._error_response = error
 
 
 def test_Result_Success_is_immutable():
     result: Result = Success(SuccessResponse())
     with pytest.raises(FrozenInstanceError):
-        result._success = SuccessResponse()
+        result._success_response = SuccessResponse()
 
 
 def test_Success_init_requires_any_arg():

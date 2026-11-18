@@ -29,14 +29,14 @@ class CounterController:
         result: Result = self.increment_use_case.execute()
 
         if isinstance(result, Success):
-            success_vm: CounterViewModel = self.presenter.present_counter(
-                result.success
+            success_vm: CounterViewModel = self.presenter.present_counter_response(
+                result.success_response
             )
             return OperationSuccess(success_vm)
 
         if isinstance(result, Error):
-            error_vm: ErrorViewModel = self.presenter.present_error(
-                result.error.message, str(result.error.code.name)
+            error_vm: ErrorViewModel = self.presenter.present_error_response(
+                result.error_response.message, str(result.error_response.code.name)
             )
             return OperationFailure(error_vm)
 
