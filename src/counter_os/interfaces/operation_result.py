@@ -1,45 +1,33 @@
 from dataclasses import dataclass
 
 from counter_os.interfaces.view_models.error_view_model import ErrorViewModel
+from counter_os.interfaces.view_models.success_view_model import SuccessViewModel
 
 
-@dataclass
-class OperationResult[T]:
-    _success: T | None = None
-    _error: ErrorViewModel | None = None
+@dataclass(frozen=True)
+class OperationFailure:
+    _error_vm: ErrorViewModel
 
-    def __init__(self, success: T | None = None, error: ErrorViewModel | None = None):
-        if (success is None and error is None) or (
-            success is not None and error is not None
-        ):
-            raise ValueError("Either success or error must be provided, but not both")
-        self._success = success
-        self._error = error
-
-    @classmethod
-    def succeed(cls, value: T) -> OperationResult:
-        return cls(success=value)
-
-    @classmethod
-    def fail(cls, message: str, code: str | None = None) -> OperationResult:
-        return cls(error=ErrorViewModel(message, code))
+    def __post_init__(self):
+        if not isinstance(self._error_vm, ErrorViewModel):
+            raise TypeError("Argument must be or extend off ErrorViewModel class")
 
     @property
-    def is_success(self) -> bool:
-        return self._success is not None and self._error is None
+    def error_vm(self):
+        return self._error_vm
+
+
+@dataclass(frozen=True)
+class OperationSuccess:
+    _success_vm: SuccessViewModel
+
+    def __post_init__(self):
+        if not isinstance(self._success_vm, SuccessViewModel):
+            raise TypeError("Argument must extend off the SuccessViewModel class")
 
     @property
-    def is_failure(self) -> bool:
-        return self._error is not None and self._success is None
+    def success_vm(self):
+        return self._success_vm
 
-    @property
-    def success(self) -> T:
-        if self._success is None:
-            raise ValueError("Cannot access success value on error result")
-        return self._success
 
-    @property
-    def error(self) -> ErrorViewModel:
-        if self._error is None:
-            raise ValueError("Cannot access error value on success result")
-        return self._error
+type OperationResult = OperationSuccess | OperationFailure

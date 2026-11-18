@@ -11,7 +11,11 @@ from counter_os.application.result import (
 from counter_os.domain.entities.counter import Counter
 from counter_os.domain.value_objects.count import Count
 from counter_os.interfaces.controllers.counter_controller import CounterController
-from counter_os.interfaces.operation_result import OperationResult
+from counter_os.interfaces.operation_result import (
+    OperationFailure,
+    OperationResult,
+    OperationSuccess,
+)
 from counter_os.interfaces.view_models.counter_view_model import CounterViewModel
 from counter_os.interfaces.view_models.error_view_model import ErrorViewModel
 
@@ -82,12 +86,10 @@ def test_CounterController_init_requires_counter_use_cases():
 
 
 def test_CounterController_handle_increment_success_path(mock_counter_controller):
-    op_result: OperationResult[CounterViewModel] = (
-        mock_counter_controller.handle_increment()
-    )
-    assert op_result.is_success
-    assert isinstance(op_result.success, CounterViewModel)
-    assert op_result.success.count == 1
+    op_result: OperationResult = mock_counter_controller.handle_increment()
+    assert isinstance(op_result, OperationSuccess)
+    assert isinstance(op_result.success_vm, CounterViewModel)
+    assert op_result.success_vm.count == 1
 
 
 def test_CounterController_handle_increment_error_greater_than_100_path(
@@ -109,13 +111,13 @@ def test_CounterController_handle_increment_error_greater_than_100_path(
     )
 
     # Act
-    op_result: OperationResult[CounterViewModel] = counter_controller.handle_increment()
+    op_result: OperationResult = counter_controller.handle_increment()
 
     # Assert
-    assert op_result.is_failure
-    assert isinstance(op_result.error, ErrorViewModel)
+    assert isinstance(op_result, OperationFailure)
+    assert isinstance(op_result.error_vm, ErrorViewModel)
     assert (
-        op_result.error.message
+        op_result.error_vm.message
         == "101 is greater than 100 and count cannot be greater than 100."
     )
-    assert op_result.error.code == "COUNT_CANNOT_BE_GREATER_THAN_100"
+    assert op_result.error_vm.code == "COUNT_CANNOT_BE_GREATER_THAN_100"
