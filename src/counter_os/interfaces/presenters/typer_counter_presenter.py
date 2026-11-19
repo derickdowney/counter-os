@@ -11,7 +11,8 @@ class TyperCounterPresenter(CounterPresenter):
     def present_counter_response(
         self, counter_response: CounterResponse
     ) -> CounterViewModel:
-        return CounterViewModel(1)
+        current_count: str = f"Current count is: {counter_response.count}"
+        return CounterViewModel(current_count)
 
     def present_error_response(self, error_response: ErrorResponse) -> ErrorViewModel:
         return ErrorViewModel("some message", "some code")
