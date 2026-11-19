@@ -15,4 +15,4 @@ class TyperCounterPresenter(CounterPresenter):
         return CounterViewModel(current_count)
 
     def present_error_response(self, error_response: ErrorResponse) -> ErrorViewModel:
-        return ErrorViewModel("some message", "some code")
+        return ErrorViewModel(error_response.message, error_response.code)
