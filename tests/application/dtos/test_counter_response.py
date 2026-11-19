@@ -27,3 +27,8 @@ def test_CounterResponse_is_in_class_SuccessResponse():
 def test_CounterResponse_from_entity_class_method_captures_count():
     response = CounterResponse.from_entity(Counter(Count(17)))
     assert response.count == 17
+
+
+def test_CounterResponse_init_with_invalid_args_throws_TypeError():
+    with pytest.raises(TypeError):
+        CounterResponse("hello")
