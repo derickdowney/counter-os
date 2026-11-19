@@ -61,7 +61,7 @@ def mock_counter_set_use_case():
 def mock_counter_presenter():
     class MockCounterPresenter:
         def present_counter_response(self, counter_response: CounterResponse):
-            return CounterViewModel(counter_response.count)
+            return CounterViewModel(str(counter_response.count))
 
         def present_error_response(self, error_response: ErrorResponse):
             return ErrorViewModel(error_response.message, error_response.code.name)
@@ -93,7 +93,7 @@ def test_CounterController_handle_increment_success_path(counter_controller):
     op_result: OperationResult = counter_controller.handle_increment()
     assert isinstance(op_result, OperationSuccess)
     assert isinstance(op_result.success_vm, CounterViewModel)
-    assert op_result.success_vm.count == 1
+    assert op_result.success_vm.current_count == "1"
 
 
 def test_CounterController_handle_increment_error_greater_than_100_path(
@@ -122,7 +122,7 @@ def test_CounterController_handle_decrement_success(counter_controller):
     op_result: OperationResult = counter_controller.handle_decrement()
     assert isinstance(op_result, OperationSuccess)
     assert isinstance(op_result.success_vm, CounterViewModel)
-    assert op_result.success_vm.count == 0
+    assert op_result.success_vm.current_count == "0"
 
 
 def test_CounterController_handle_decrement_error_negative_value(
@@ -150,7 +150,7 @@ def test_CounterController_handle_set_success(counter_controller):
     op_result: OperationResult = counter_controller.handle_set(50)
     assert isinstance(op_result, OperationSuccess)
     assert isinstance(op_result.success_vm, CounterViewModel)
-    assert op_result.success_vm.count == 50
+    assert op_result.success_vm.current_count == "50"
 
 
 def test_CounterController_handle_set_error_negative_value(counter_controller):

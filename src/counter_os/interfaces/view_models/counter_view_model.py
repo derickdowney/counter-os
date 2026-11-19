@@ -7,4 +7,4 @@ from counter_os.interfaces.view_models.success_view_model import SuccessViewMode
 class CounterViewModel(SuccessViewModel):
     """View-specific representation of a counter."""
 
-    count: int
+    current_count: str
