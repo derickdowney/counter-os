@@ -7,3 +7,11 @@ def test_ApplicationSettings_use_default_settings_when_no_env_file(monkeypatch):
     settings: ApplicationSettings = ApplicationSettings.from_environment()
 
     assert settings.counter_repository_type == "memory"
+
+
+def test_ApplicationSettings_ensure_from_environment_pulls_actual_env_var(monkeypatch):
+    monkeypatch.setenv("COUNTER_REPOSITORY_TYPE", "test_repo_type")
+
+    settings: ApplicationSettings = ApplicationSettings.from_environment()
+
+    assert settings.counter_repository_type == "test_repo_type"
