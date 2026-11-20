@@ -1,0 +1,18 @@
+import os
+from dataclasses import dataclass
+
+from dotenv import load_dotenv
+
+
+@dataclass
+class ApplicationSettings:
+    counter_repository_type: str
+
+    @classmethod
+    def from_environment(cls) -> ApplicationSettings:
+        # Automatically load your .env file
+        load_dotenv()
+
+        return cls(
+            counter_repository_type=os.getenv("COUNTER_REPOSITORY_TYPE", "memory")
+        )
