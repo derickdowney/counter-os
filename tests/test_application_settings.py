@@ -3,6 +3,7 @@ from dataclasses import FrozenInstanceError
 import pytest
 
 from counter_os.application_settings import ApplicationSettings
+from counter_os.repository_factory import RepositoryType
 
 
 def test_ApplicationSettings_use_default_settings_when_no_env_file(monkeypatch):
@@ -10,7 +11,7 @@ def test_ApplicationSettings_use_default_settings_when_no_env_file(monkeypatch):
 
     settings: ApplicationSettings = ApplicationSettings.from_environment()
 
-    assert settings.counter_repository_type == "memory"
+    assert settings.counter_repository_type == RepositoryType.MEMORY
 
 
 def test_ApplicationSettings_ensure_from_environment_pulls_actual_env_var(monkeypatch):

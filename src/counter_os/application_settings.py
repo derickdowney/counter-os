@@ -3,6 +3,8 @@ from dataclasses import dataclass
 
 from dotenv import load_dotenv
 
+from counter_os.repository_factory import RepositoryType
+
 
 @dataclass(frozen=True)
 class ApplicationSettings:
@@ -14,5 +16,7 @@ class ApplicationSettings:
         load_dotenv()
 
         return cls(
-            counter_repository_type=os.getenv("COUNTER_REPOSITORY_TYPE", "memory")
+            counter_repository_type=os.getenv(
+                "COUNTER_REPOSITORY_TYPE", RepositoryType.MEMORY
+            )
         )
