@@ -48,7 +48,7 @@ def test_ApplicationContainer_init_requires_args():
         ApplicationContainer()
 
 
-def test_ApplicationCounter_init_requires_repo_and_presenter(
+def test_ApplicationContainer_init_requires_repo_and_presenter(
     counter_repository, counter_presenter
 ):
     app = ApplicationContainer(counter_repository, counter_presenter)
@@ -56,7 +56,7 @@ def test_ApplicationCounter_init_requires_repo_and_presenter(
     assert isinstance(app.counter_presenter, CounterPresenter)
 
 
-def test_ApplicationCounter_init_wires_up_counter_use_cases_and_controller(
+def test_ApplicationContainer_init_wires_up_counter_use_cases_and_controller(
     counter_repository, counter_presenter
 ):
     app = ApplicationContainer(counter_repository, counter_presenter)
