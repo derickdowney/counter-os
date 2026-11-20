@@ -16,7 +16,7 @@ def test_CounterResponse_cannot_init_with_no_args():
 def test_CounterResponse_is_immutable():
     response = CounterResponse.from_entity(Counter(Count(1)))
     with pytest.raises(FrozenInstanceError):
-        response.count = 2
+        response.current_count = 2
 
 
 def test_CounterResponse_is_in_class_SuccessResponse():
@@ -26,7 +26,7 @@ def test_CounterResponse_is_in_class_SuccessResponse():
 
 def test_CounterResponse_from_entity_class_method_captures_count():
     response = CounterResponse.from_entity(Counter(Count(17)))
-    assert response.count == 17
+    assert response.current_count == 17
 
 
 def test_CounterResponse_init_with_invalid_args_throws_TypeError():

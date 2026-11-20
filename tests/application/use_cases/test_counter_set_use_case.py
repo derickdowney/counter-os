@@ -37,7 +37,7 @@ def test_CounterSetUseCase_successfully_sets_counter_to_requested_value():
     result: Result = use_case.execute(request)
     assert isinstance(result, Success)
     assert isinstance(result.success_response, CounterResponse)
-    assert result.success_response.count == 50
+    assert result.success_response.current_count == 50
 
 
 def test_CounterSetUseCase_raises_error_when_set_to_negative_number():

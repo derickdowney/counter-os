@@ -61,7 +61,7 @@ def mock_counter_set_use_case():
 def mock_counter_presenter():
     class MockCounterPresenter:
         def present_counter_response(self, counter_response: CounterResponse):
-            return CounterViewModel(str(counter_response.count))
+            return CounterViewModel(str(counter_response.current_count))
 
         def present_error_response(self, error_response: ErrorResponse):
             return ErrorViewModel(error_response.message, error_response.code.name)

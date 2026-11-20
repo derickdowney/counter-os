@@ -21,5 +21,5 @@ def test_CounterGetUseCase_execute_returns_CounterResponse_with_current_count(
     result: Result = use_case.execute()
     assert isinstance(result, Success)
     assert isinstance(result.success_response, CounterResponse)
-    assert isinstance(result.success_response.count, int)
-    assert result.success_response.count == 0
+    assert isinstance(result.success_response.current_count, int)
+    assert result.success_response.current_count == 0

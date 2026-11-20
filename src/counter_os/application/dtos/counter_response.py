@@ -6,17 +6,17 @@ from counter_os.domain.entities.counter import Counter
 
 @dataclass(frozen=True)
 class CounterResponse(SuccessResponse):
-    _count: int
+    _current_count: int
 
     def __post_init__(self):
-        if type(self._count) != int:
+        if type(self._current_count) != int:
             raise TypeError("count must be an integer")
 
     @classmethod
     def from_entity(cls, counter: Counter) -> CounterResponse:
         """Create a response from the passed-in Counter entity"""
-        return cls(_count=counter.count.value)
+        return cls(_current_count=counter.count.value)
 
     @property
-    def count(self):
-        return self._count
+    def current_count(self):
+        return self._current_count

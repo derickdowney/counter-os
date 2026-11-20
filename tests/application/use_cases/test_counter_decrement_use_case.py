@@ -28,7 +28,7 @@ def test_CounterDecrementUseCase_execute_success():
 
     assert isinstance(result, Success)
     assert isinstance(result.success_response, CounterResponse)
-    assert result.success_response.count == 0
+    assert result.success_response.current_count == 0
     counter_repo.save.assert_called_once_with(Counter(Count(0)))
 
 

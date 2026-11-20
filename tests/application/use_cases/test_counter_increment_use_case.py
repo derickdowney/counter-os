@@ -28,7 +28,7 @@ def test_CounterIncrementUseCase_execute_success():
 
     assert isinstance(result, Success)
     assert isinstance(result.success_response, CounterResponse)
-    assert result.success_response.count == 1
+    assert result.success_response.current_count == 1
     counter_repo.save.assert_called_once_with(Counter(Count(1)))
 
 
