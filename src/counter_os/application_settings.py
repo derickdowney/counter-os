@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from dotenv import load_dotenv
 
 
-@dataclass
+@dataclass(frozen=True)
 class ApplicationSettings:
     counter_repository_type: str
 
