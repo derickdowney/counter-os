@@ -10,11 +10,11 @@ from counter_os.application.use_cases.counter_increment_use_case import (
     CounterIncrementUseCase,
 )
 from counter_os.application.use_cases.counter_set_use_case import CounterSetUseCase
-from counter_os.domain.entities.counter import Counter
-from counter_os.domain.repositories.counter_repository import CounterRepository
-from counter_os.infrastructure.configuration.application_container import (
+from counter_os.application_container_factory import (
     ApplicationContainer,
 )
+from counter_os.domain.entities.counter import Counter
+from counter_os.domain.repositories.counter_repository import CounterRepository
 from counter_os.interfaces.controllers.counter_controller import CounterController
 from counter_os.interfaces.presenters.counter_presenter import CounterPresenter
 
