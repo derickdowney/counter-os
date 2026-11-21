@@ -11,8 +11,7 @@ class ClickCounterPresenter(CounterPresenter):
     def present_counter_response(
         self, counter_response: CounterResponse
     ) -> CounterViewModel:
-        current_count: str = f"Current count is: {counter_response.current_count}"
-        return CounterViewModel(current_count)
+        return CounterViewModel(counter_response.current_count)
 
     def present_error_response(self, error_response: ErrorResponse) -> ErrorViewModel:
         return ErrorViewModel(error_response.message, error_response.code)

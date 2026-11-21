@@ -16,7 +16,7 @@ def test_ClickCounterPresenter_present_counter_response():
     response = CounterResponse(10)
     presenter = ClickCounterPresenter()
     counter_vm: CounterViewModel = presenter.present_counter_response(response)
-    assert counter_vm.current_count == "Current count is: 10"
+    assert counter_vm.current_count == 10
 
 
 def test_ClickCounterPresenter_present_counter_error():
