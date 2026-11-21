@@ -1,3 +1,5 @@
+from unittest.mock import Mock
+
 import pytest
 
 from counter_os.bootstrap.application_container import ApplicationContainer
@@ -26,3 +28,16 @@ def test_ClickCliApp_display_count(capsys, click_cli_app):
     output: str = capsys.readouterr().out
     assert output == "Current count is: 0\n"
     assert click_cli_app.cached_current_count == 0
+
+
+def test_ClickCliApp_run_keyboard_interrupt(monkeypatch, capsys):
+    click_cli_app = ClickCliApp(app=Mock())
+
+    def simulate_interrupt():
+        raise KeyboardInterrupt
+
+    monkeypatch.setattr(click_cli_app, "_display_current_count", simulate_interrupt)
+    exit_code: int = click_cli_app.run()
+    capturred = capsys.readouterr()
+    assert exit_code == 0
+    assert capturred.err == "\nGoodbye!\n"

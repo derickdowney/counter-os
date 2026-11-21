@@ -10,6 +10,14 @@ class ClickCliApp:
         self.app_container = app
         self.cached_current_count: int
 
+    def run(self) -> int:
+        try:
+            self._display_current_count()
+            return 0
+        except KeyboardInterrupt:
+            click.echo("\nGoodbye!", err=True)
+            return 0
+
     def _display_current_count(self) -> None:
         click.clear()
         result: OperationResult = self.app_container.counter_controller.handle_get()
