@@ -5,8 +5,8 @@ from counter_os.interfaces.view_models.counter_view_model import CounterViewMode
 from counter_os.interfaces.view_models.error_view_model import ErrorViewModel
 
 
-class TyperCounterPresenter(CounterPresenter):
-    """Counter presenter for the Typer command-line interface"""
+class ClickCounterPresenter(CounterPresenter):
+    """Counter presenter for the Click command-line interface"""
 
     def present_counter_response(
         self, counter_response: CounterResponse
