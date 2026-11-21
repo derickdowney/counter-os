@@ -5,9 +5,9 @@ from counter_os.infrastructure.persistence.memory_counter_repository import (
 )
 
 
-def test_MemoryCounterRepository_saves_to_and_gets_from_memory(counter):
-    counter.count = Count(50)
-    counter_repository: MemoryCounterRepository = MemoryCounterRepository(counter)
+def test_MemoryCounterRepository_saves_to_and_gets_from_memory():
+    counter = Counter(Count(50))
+    counter_repository: MemoryCounterRepository = MemoryCounterRepository()
     counter_repository.save(counter)
     saved_counter: Counter = counter_repository.get()
     assert saved_counter.count == Count(50)
