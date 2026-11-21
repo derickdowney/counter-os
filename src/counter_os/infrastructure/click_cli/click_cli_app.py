@@ -1,4 +1,4 @@
-from counter_os.bootstrap.application_factory import ApplicationContainer
+from counter_os.bootstrap.application_container import ApplicationContainer
 
 
 class ClickCli:
