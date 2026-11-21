@@ -32,8 +32,7 @@ class ClickCliApp:
             counter_vm: CounterViewModel = result.success_vm
             click.echo(f"Current count is: {counter_vm.current_count}")
         elif isinstance(result, OperationError):
-            error_vm: ErrorViewModel = result.error_vm
-            click.echo(error_vm.message, err=True)
+            self._display_error(result)
         else:
             raise TypeError("Operation was neither success nor error")
 
@@ -43,6 +42,7 @@ class ClickCliApp:
         )
         if isinstance(result, OperationSuccess):
             self._display_current_count()
+        elif isinstance(result, OperationError):
+            self._display_error(result)
         else:
-            # TODO: Display error
-            pass
+            raise TypeError("Operation was neither success nor error")

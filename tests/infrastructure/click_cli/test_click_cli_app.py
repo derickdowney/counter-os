@@ -79,3 +79,13 @@ def test_ClickCliApp_display_current_count_error_path(capsys):
     click_cli_app._display_current_count()
     err = capsys.readouterr().err
     assert err == "some error\n"
+
+
+def test_ClickCliApp_increment_count_error_path(capsys):
+    app_container: ApplicationContainer = Mock()
+    op_error = OperationError(ErrorViewModel(message="another error"))
+    app_container.counter_controller.handle_increment.return_value = op_error
+    click_cli_app = ClickCliApp(app_container)
+    click_cli_app._increment_count()
+    err = capsys.readouterr().err
+    assert err == "another error\n"
