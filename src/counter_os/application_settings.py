@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from dotenv import load_dotenv
 
-from counter_os.repository_factory import RepositoryType
+from counter_os.infrastructure.persistence.repository_type import RepositoryType
 
 
 @dataclass(frozen=True)

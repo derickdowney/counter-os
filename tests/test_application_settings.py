@@ -3,7 +3,7 @@ from dataclasses import FrozenInstanceError
 import pytest
 
 from counter_os.application_settings import ApplicationSettings
-from counter_os.repository_factory import RepositoryType
+from counter_os.infrastructure.persistence.repository_type import RepositoryType
 
 
 def test_ApplicationSettings_use_default_settings_when_no_env_file(monkeypatch):
