@@ -1,8 +1,8 @@
 import pytest
 
-from counter_os.infrastructure.click_cli.click_cli_app import ClickCli
+from counter_os.infrastructure.click_cli.click_cli_app import ClickCliApp
 
 
-def test_ClickCli_init_requires_ApplicationContainer():
+def test_ClickCliApp_init_requires_ApplicationContainer():
     with pytest.raises(TypeError):
-        ClickCli()
+        ClickCliApp()
