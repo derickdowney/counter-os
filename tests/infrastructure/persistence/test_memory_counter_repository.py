@@ -15,3 +15,8 @@ def test_InMemoryCounterRepository_saves_to_and_gets_from_memory():
     # Ensure counter stored as deepcopy, not as reference
     counter.count = Count(100)
     assert saved_counter.count == Count(50)
+
+
+def test_InMemoryCounterRepository_first_get_returns_counter_at_zero():
+    counter_repository = InMemoryCounterRepository()
+    assert counter_repository.get() == Counter(Count(0))
