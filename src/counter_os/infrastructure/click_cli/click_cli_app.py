@@ -8,7 +8,6 @@ from counter_os.interfaces.view_models.counter_view_model import CounterViewMode
 class ClickCliApp:
     def __init__(self, app: ApplicationContainer):
         self.app_container = app
-        self.cached_current_count: int
 
     def run(self) -> int:
         try:
@@ -23,6 +22,17 @@ class ClickCliApp:
         result: OperationResult = self.app_container.counter_controller.handle_get()
         if isinstance(result, OperationSuccess):
             counter_vm: CounterViewModel = result.success_vm
-            self.cached_current_count = counter_vm.current_count
+            click.echo(f"Current count is: {counter_vm.current_count}")
+        else:
+            # TODO: Display error
+            pass
 
-        click.echo(f"Current count is: {self.cached_current_count}")
+    def _increment_count(self) -> None:
+        result: OperationResult = (
+            self.app_container.counter_controller.handle_increment()
+        )
+        if isinstance(result, OperationSuccess):
+            self._display_current_count()
+        else:
+            # TODO: Display error
+            pass

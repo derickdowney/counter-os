@@ -2,7 +2,6 @@ from unittest.mock import Mock
 
 import pytest
 
-from counter_os.bootstrap.application_container import ApplicationContainer
 from counter_os.bootstrap.application_factory import create_application_container
 from counter_os.infrastructure.click_cli.click_cli_app import ClickCliApp
 from counter_os.interfaces.presenters.click_counter_presenter import (
@@ -27,7 +26,6 @@ def test_ClickCliApp_display_count(capsys, click_cli_app):
     click_cli_app._display_current_count()
     output: str = capsys.readouterr().out
     assert output == "Current count is: 0\n"
-    assert click_cli_app.cached_current_count == 0
 
 
 def test_ClickCliApp_run_keyboard_interrupt(monkeypatch, capsys):
@@ -47,4 +45,17 @@ def test_ClickCliApp_run_displays_current_count(capsys, click_cli_app):
     click_cli_app.run()
     output: str = capsys.readouterr().out
     assert output == "Current count is: 0\n"
-    assert click_cli_app.cached_current_count == 0
+
+
+def test_ClickCliApp_increment_count(capsys, click_cli_app):
+    click_cli_app.run()
+    output: str = capsys.readouterr().out
+    assert output == "Current count is: 0\n"
+
+    click_cli_app._increment_count()
+    output = capsys.readouterr().out
+    assert output == "Current count is: 1\n"
+
+    click_cli_app._increment_count()
+    output = capsys.readouterr().out
+    assert output == "Current count is: 2\n"
