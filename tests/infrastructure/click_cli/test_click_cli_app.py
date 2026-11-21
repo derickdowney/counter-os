@@ -4,9 +4,11 @@ import pytest
 
 from counter_os.bootstrap.application_factory import create_application_container
 from counter_os.infrastructure.click_cli.click_cli_app import ClickCliApp
+from counter_os.interfaces.operation_result import OperationError
 from counter_os.interfaces.presenters.click_counter_presenter import (
     ClickCounterPresenter,
 )
+from counter_os.interfaces.view_models.error_view_model import ErrorViewModel
 
 
 @pytest.fixture
@@ -59,3 +61,10 @@ def test_ClickCliApp_increment_count(capsys, click_cli_app):
     click_cli_app._increment_count()
     output = capsys.readouterr().out
     assert output == "Current count is: 2\n"
+
+
+def test_ClickCliApp_display_error(capsys, click_cli_app):
+    op_error = OperationError(ErrorViewModel(message="some error message"))
+    click_cli_app._display_error(op_error)
+    error = capsys.readouterr().err
+    assert error == "some error message\n"
