@@ -2,7 +2,7 @@ from dataclasses import FrozenInstanceError
 
 import pytest
 
-from counter_os.application_settings import ApplicationSettings
+from counter_os.bootstrap.application_settings import ApplicationSettings
 from counter_os.infrastructure.persistence.repository_type import RepositoryType
 
 

@@ -1,4 +1,4 @@
-from counter_os.application_settings import ApplicationSettings
+from counter_os.bootstrap.application_settings import ApplicationSettings
 from counter_os.domain.repositories.counter_repository import CounterRepository
 from counter_os.infrastructure.persistence.memory_counter_repository import (
     InMemoryCounterRepository,
