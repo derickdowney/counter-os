@@ -32,7 +32,7 @@ def test_ClickCliApp_display_count(capsys, click_cli_app):
 
 
 def test_ClickCliApp_run_keyboard_interrupt(monkeypatch, capsys):
-    click_cli_app = ClickCliApp(app=Mock())
+    click_cli_app = ClickCliApp(app_container=Mock())
 
     def simulate_interrupt():
         raise KeyboardInterrupt

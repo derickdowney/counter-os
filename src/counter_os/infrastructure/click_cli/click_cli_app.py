@@ -11,8 +11,8 @@ from counter_os.interfaces.view_models.error_view_model import ErrorViewModel
 
 
 class ClickCliApp:
-    def __init__(self, app: ApplicationContainer):
-        self.app_container = app
+    def __init__(self, app_container: ApplicationContainer):
+        self.app_container = app_container
 
     def run(self) -> int:
         try:
