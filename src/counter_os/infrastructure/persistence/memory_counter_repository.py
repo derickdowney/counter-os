@@ -6,7 +6,7 @@ from counter_os.domain.repositories.counter_repository import CounterRepository
 
 
 @dataclass
-class MemoryCounterRepository(CounterRepository):
+class InMemoryCounterRepository(CounterRepository):
     def save(self, counter: Counter):
         self._counter = copy.deepcopy(counter)
 
