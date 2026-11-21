@@ -1,6 +1,6 @@
 from counter_os.bootstrap.application_configuration import ApplicationConfiguration
 from counter_os.domain.repositories.counter_repository import CounterRepository
-from counter_os.infrastructure.persistence.memory_counter_repository import (
+from counter_os.infrastructure.persistence.in_memory_counter_repository import (
     InMemoryCounterRepository,
 )
 from counter_os.infrastructure.persistence.repository_type import RepositoryType
