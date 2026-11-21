@@ -22,9 +22,6 @@ class ClickCliApp:
             click.echo("\nGoodbye!", err=True)
             return 0
 
-    def _display_error(self, op_error: OperationError) -> None:
-        click.echo(op_error.error_vm.message, err=True)
-
     def _display_current_count(self) -> None:
         click.clear()
         result: OperationResult = self.app_container.counter_controller.handle_get()
@@ -34,7 +31,7 @@ class ClickCliApp:
         elif isinstance(result, OperationError):
             self._display_error(result)
         else:
-            raise TypeError("Operation was neither success nor error")
+            self._display_unknown_error()
 
     def _increment_count(self) -> None:
         result: OperationResult = (
@@ -45,4 +42,10 @@ class ClickCliApp:
         elif isinstance(result, OperationError):
             self._display_error(result)
         else:
-            raise TypeError("Operation was neither success nor error")
+            self._display_unknown_error()
+
+    def _display_error(self, op_error: OperationError) -> None:
+        click.echo(op_error.error_vm.message, err=True)
+
+    def _display_unknown_error(self) -> None:
+        click.echo("Something went wrong", err=True)
