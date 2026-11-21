@@ -8,7 +8,11 @@ from counter_os.repository_factory import create_repositories
 
 def test_create_repositories_from_environment_variables(monkeypatch):
     monkeypatch.setenv("COUNTER_REPOSITORY_TYPE", RepositoryType.MEMORY)
-
     repositories: tuple[CounterRepository] = create_repositories()
+    assert isinstance(repositories[0], MemoryCounterRepository)
 
+
+def test_create_repositories_creates_memory_repo_when_no_valid_env_var(monkeypatch):
+    monkeypatch.setenv("COUNTER_REPOSITORY_TYPE", "not_a_valid_type")
+    repositories: tuple[CounterRepository] = create_repositories()
     assert isinstance(repositories[0], MemoryCounterRepository)
