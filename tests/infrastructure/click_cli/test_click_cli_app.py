@@ -41,3 +41,10 @@ def test_ClickCliApp_run_keyboard_interrupt(monkeypatch, capsys):
     capturred = capsys.readouterr()
     assert exit_code == 0
     assert capturred.err == "\nGoodbye!\n"
+
+
+def test_ClickCliApp_run_displays_current_count(capsys, click_cli_app):
+    click_cli_app.run()
+    output: str = capsys.readouterr().out
+    assert output == "Current count is: 0\n"
+    assert click_cli_app.cached_current_count == 0
