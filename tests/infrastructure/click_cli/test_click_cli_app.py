@@ -2,6 +2,7 @@ from unittest.mock import Mock
 
 import pytest
 
+from counter_os.bootstrap.application_container import ApplicationContainer
 from counter_os.bootstrap.application_factory import create_application_container
 from counter_os.infrastructure.click_cli.click_cli_app import ClickCliApp
 from counter_os.interfaces.operation_result import OperationError
@@ -68,3 +69,13 @@ def test_ClickCliApp_display_error(capsys, click_cli_app):
     click_cli_app._display_error(op_error)
     error = capsys.readouterr().err
     assert error == "some error message\n"
+
+
+def test_ClickCliApp_display_current_count_error_path(capsys):
+    app_container: ApplicationContainer = Mock()
+    op_error = OperationError(ErrorViewModel(message="some error"))
+    app_container.counter_controller.handle_get.return_value = op_error
+    click_cli_app = ClickCliApp(app_container)
+    click_cli_app._display_current_count()
+    err = capsys.readouterr().err
+    assert err == "some error\n"
