@@ -60,8 +60,12 @@ def test_ApplicationContainer_init_wires_up_counter_use_cases_and_controller(
     counter_repository, counter_presenter
 ):
     app = ApplicationContainer(counter_repository, counter_presenter)
-    assert isinstance(app.counter_increment_use_case, CounterIncrementUseCase)
-    assert isinstance(app.counter_decrement_use_case, CounterDecrementUseCase)
-    assert isinstance(app.counter_get_use_case, CounterGetUseCase)
-    assert isinstance(app.counter_set_use_case, CounterSetUseCase)
+    assert isinstance(
+        app.counter_controller.increment_use_case, CounterIncrementUseCase
+    )
+    assert isinstance(
+        app.counter_controller.decrement_use_case, CounterDecrementUseCase
+    )
+    assert isinstance(app.counter_controller.get_use_case, CounterGetUseCase)
+    assert isinstance(app.counter_controller.set_use_case, CounterSetUseCase)
     assert isinstance(app.counter_controller, CounterController)

@@ -23,21 +23,17 @@ class ApplicationContainer:
     def __post_init__(self):
         """Wire up all use cases and controllers"""
 
-        # Configure all use cases
-        self.counter_increment_use_case = CounterIncrementUseCase(
-            self.counter_repository
-        )
-        self.counter_decrement_use_case = CounterDecrementUseCase(
-            self.counter_repository
-        )
-        self.counter_get_use_case = CounterGetUseCase(self.counter_repository)
-        self.counter_set_use_case = CounterSetUseCase(self.counter_repository)
+        # Configure all use cases as local variables
+        counter_increment_use_case = CounterIncrementUseCase(self.counter_repository)
+        counter_decrement_use_case = CounterDecrementUseCase(self.counter_repository)
+        counter_get_use_case = CounterGetUseCase(self.counter_repository)
+        counter_set_use_case = CounterSetUseCase(self.counter_repository)
 
         # Configure all controllers
         self.counter_controller = CounterController(
-            increment_use_case=self.counter_increment_use_case,
-            decrement_use_case=self.counter_decrement_use_case,
-            get_use_case=self.counter_get_use_case,
-            set_use_case=self.counter_set_use_case,
+            increment_use_case=counter_increment_use_case,
+            decrement_use_case=counter_decrement_use_case,
+            get_use_case=counter_get_use_case,
+            set_use_case=counter_set_use_case,
             presenter=self.counter_presenter,
         )
