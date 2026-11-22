@@ -34,6 +34,9 @@ class ClickCliApp:
     def _display_instructions(self) -> None:
         click.echo("[+] inc  [-] dec  [<num>] set  [q] quit")
 
+    def _display_invalid_command(self) -> None:
+        click.echo("Invalid command", err=True)
+
     """
 
         RUN LOOP AND PROMPTS
@@ -51,7 +54,11 @@ class ClickCliApp:
             self._decrement_count()
             return
 
-        click.echo("Invalid command")
+        try:
+            number: int = int(user_input)
+            self._set_count(number)
+        except ValueError:
+            self._display_invalid_command()
 
     """
 

@@ -66,6 +66,20 @@ def test_ClickCliApp_display_instructions(capsys):
     assert captured.err == ""
 
 
+def test_ClickCliApp_display_invalid_command(capsys):
+    # Arrange
+    mock_app_container: ApplicationContainer = Mock()
+    click_cli_app = ClickCliApp(mock_app_container)
+
+    # Act
+    click_cli_app._display_invalid_command()
+
+    # Assert
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert captured.err == "Invalid command\n"
+
+
 """
 
     RUN LOOP AND PROMPTS
@@ -77,7 +91,9 @@ def test_ClickCliApp_display_instructions(capsys):
     "user_input",
     ["+", " +", "+ ", " + "],
 )
-def test_ClickCliApp_prompt_user_interaction_increment(user_input, monkeypatch) -> None:
+def test_ClickCliApp_prompt_user_interaction_increment_count(
+    user_input, monkeypatch
+) -> None:
     # Arrange
     mock_app_container: ApplicationContainer = Mock()
     click_cli_app = ClickCliApp(mock_app_container)
@@ -95,7 +111,9 @@ def test_ClickCliApp_prompt_user_interaction_increment(user_input, monkeypatch) 
     "user_input",
     ["-", " -", "- ", " - "],
 )
-def test_ClickCliApp_prompt_user_interaction_decrement(user_input, monkeypatch) -> None:
+def test_ClickCliApp_prompt_user_interaction_decrement_count(
+    user_input, monkeypatch
+) -> None:
     # Arrange
     mock_app_container: ApplicationContainer = Mock()
     click_cli_app = ClickCliApp(mock_app_container)
@@ -107,6 +125,43 @@ def test_ClickCliApp_prompt_user_interaction_decrement(user_input, monkeypatch) 
 
     # Assert
     click_cli_app._decrement_count.assert_called_once()
+
+
+@pytest.mark.parametrize("user_input", ["0", " 1", "20 ", " 97 ", "1000000"])
+def test_ClickCliApp_prompt_user_interaction_set_count_success(
+    user_input, monkeypatch
+) -> None:
+    # Arrange
+    mock_app_container: ApplicationContainer = Mock()
+    click_cli_app = ClickCliApp(mock_app_container)
+    click_cli_app._set_count = Mock()
+    monkeypatch.setattr(click, "prompt", Mock(return_value=user_input))
+
+    # Act
+    click_cli_app._prompt_user_interaction()
+
+    # Assert
+    click_cli_app._set_count.assert_called_once()
+
+
+@pytest.mark.parametrize(
+    "user_input",
+    ["hello", " 1b", "@ ", " ] "],
+)
+def test_ClickCliApp_prompt_user_interaction_set_count_invalid(
+    user_input, monkeypatch
+) -> None:
+    # Arrange
+    mock_app_container: ApplicationContainer = Mock()
+    click_cli_app = ClickCliApp(mock_app_container)
+    click_cli_app._display_invalid_command = Mock()
+    monkeypatch.setattr(click, "prompt", Mock(return_value=user_input))
+
+    # Act
+    click_cli_app._prompt_user_interaction()
+
+    # Assert
+    click_cli_app._display_invalid_command.assert_called_once()
 
 
 """
