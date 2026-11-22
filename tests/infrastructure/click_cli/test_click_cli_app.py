@@ -51,6 +51,22 @@ def test_ClickCliApp_display_error_view_model(capsys):
     assert capsys.readouterr().err == "Error: some error\nCode: SOME_CODE\n"
 
 
+def test_ClickCliApp_get_count_success(capsys):
+    # Arrange
+    mock_counter_vm = CounterViewModel(27)
+    mock_op_success = OperationSuccess(mock_counter_vm)
+    mock_app_container: ApplicationContainer = Mock()
+    mock_app_container.counter_controller.handle_get.return_value = mock_op_success
+    click_cli_app = ClickCliApp(mock_app_container)
+
+    # Act
+    click_cli_app._get_count()
+
+    # Assert
+    mock_app_container.counter_controller.handle_get.assert_called_once()
+    assert capsys.readouterr().out == "Current count is: 27\n"
+
+
 # def test_ClickCliApp_display_count(capsys, click_cli_app):
 #     click_cli_app._display_current_count()
 #     output: str = capsys.readouterr().out

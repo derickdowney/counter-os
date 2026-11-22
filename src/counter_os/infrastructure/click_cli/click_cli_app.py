@@ -24,6 +24,13 @@ class ClickCliApp:
     def _display_unknown_error(self) -> None:
         click.echo("Something went wrong", err=True)
 
+    def _get_count(self) -> None:
+        op_result: OperationResult = self.app_container.counter_controller.handle_get()
+
+        if isinstance(op_result, OperationSuccess):
+            counter_vm: CounterViewModel = op_result.success_vm
+            self._display_counter_view_model(counter_vm)
+
     # def run(self) -> int:
     #     try:
     #         self._display_current_count()
