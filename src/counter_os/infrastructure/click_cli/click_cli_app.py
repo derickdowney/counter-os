@@ -44,6 +44,9 @@ class ClickCliApp:
         else:
             self._display_unknown_error()
 
+    def _display_counter_view_model(self, counter_vm: CounterViewModel):
+        click.echo(f"Current count is: {counter_vm.current_count}")
+
     def _display_error(self, op_error: OperationError) -> None:
         click.echo(op_error.error_vm.message, err=True)
 

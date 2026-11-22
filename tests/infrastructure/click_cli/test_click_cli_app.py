@@ -9,6 +9,7 @@ from counter_os.interfaces.operation_result import OperationError
 from counter_os.interfaces.presenters.click_counter_presenter import (
     ClickCounterPresenter,
 )
+from counter_os.interfaces.view_models.counter_view_model import CounterViewModel
 from counter_os.interfaces.view_models.error_view_model import ErrorViewModel
 
 
@@ -23,6 +24,19 @@ def click_cli_app() -> ClickCliApp:
 def test_ClickCliApp_init_requires_ApplicationContainer():
     with pytest.raises(TypeError):
         ClickCliApp()
+
+
+def test_ClickCliApp_display_counter_view_model(capsys):
+    # Arrange
+    mock_app_container = Mock(spec=ApplicationContainer)
+    click_cli_app = ClickCliApp(mock_app_container)
+    counter_vm = CounterViewModel(11)
+
+    # Act
+    click_cli_app._display_counter_view_model(counter_vm)
+
+    # Assert
+    assert capsys.readouterr().out == "Current count is: 11\n"
 
 
 def test_ClickCliApp_display_count(capsys, click_cli_app):
