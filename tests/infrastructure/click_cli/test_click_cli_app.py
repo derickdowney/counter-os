@@ -5,7 +5,7 @@ import pytest
 from counter_os.bootstrap.application_container import ApplicationContainer
 from counter_os.bootstrap.application_factory import create_application_container
 from counter_os.infrastructure.click_cli.click_cli_app import ClickCliApp
-from counter_os.interfaces.operation_result import OperationError
+from counter_os.interfaces.operation_result import OperationError, OperationSuccess
 from counter_os.interfaces.presenters.click_counter_presenter import (
     ClickCounterPresenter,
 )
@@ -103,3 +103,20 @@ def test_ClickCliApp_increment_count_error_path(capsys):
     click_cli_app._increment_count()
     err = capsys.readouterr().err
     assert err == "another error\n"
+
+
+def test_ClickCliApp_decrement_count_success(capsys):
+    # Arrange
+    mock_app_container: ApplicationContainer = Mock()
+    mock_op_success = OperationSuccess(CounterViewModel(49))
+    mock_app_container.counter_controller.handle_decrement.return_value = (
+        mock_op_success
+    )
+    click_cli_app = ClickCliApp(mock_app_container)
+
+    # Act
+    click_cli_app._decrement_count()
+
+    # Assert
+    mock_app_container.counter_controller.handle_decrement.assert_called_once()
+    assert capsys.readouterr().out == "Current count is: 49\n"
