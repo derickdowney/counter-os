@@ -25,6 +25,15 @@ class ClickCliApp:
         click.echo("Something went wrong", err=True)
         click.echo("Operation resulted in neither success nor error", err=True)
 
+    def _display_instructions(self) -> None:
+        click.echo("[+] inc  [-] dec  [<num>] set  [q] quit")
+
+    """
+
+        USE CASES
+
+    """
+
     def _get_count(self) -> None:
         op_result: OperationResult = self.app_container.counter_controller.handle_get()
 

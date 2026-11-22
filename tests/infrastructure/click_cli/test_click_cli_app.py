@@ -212,6 +212,22 @@ def test_ClickCliApp_decrement_count_unknown_error():
     click_cli_app._display_unknown_result_type_error.assert_called_once()
 
 
+def test_ClickCliApp_display_instructions(capsys):
+    # Arrange
+    mock_app_container: ApplicationContainer = Mock()
+    click_cli_app = ClickCliApp(mock_app_container)
+
+    # Act
+    click_cli_app._display_instructions()
+
+    # Assert
+    actual_out: str = capsys.readouterr().out
+    actual_err: str = capsys.readouterr().err
+    expected_out: str = "[+] inc  [-] dec  [<num>] set  [q] quit\n"
+    assert actual_out == expected_out
+    assert actual_err == ""
+
+
 """
 
     SET COUNT
