@@ -57,8 +57,9 @@ class ClickCliApp:
     def _display_counter_view_model(self, counter_vm: CounterViewModel):
         click.echo(f"Current count is: {counter_vm.current_count}")
 
-    def _display_error(self, op_error: OperationError) -> None:
-        click.echo(op_error.error_vm.message, err=True)
+    def _display_error_view_model(self, error_vm: ErrorViewModel):
+        click.echo(f"Error: {error_vm.message}", err=True)
+        click.echo(f"Code: {error_vm.code}", err=True)
 
     def _display_unknown_error(self) -> None:
         click.echo("Something went wrong", err=True)
