@@ -74,6 +74,21 @@ def test_ClickCliApp_get_count_error():
     click_cli_app._display_error_view_model.assert_called_once_with(mock_error_vm)
 
 
+def test_ClickCliApp_get_count_unknown_error():
+    # Arrange
+    mock_app_container: ApplicationContainer = Mock()
+    mock_app_container.counter_controller.handle_get.return_value = None
+    click_cli_app = ClickCliApp(mock_app_container)
+    click_cli_app._display_unknown_result_type_error = Mock()
+
+    # Act
+    click_cli_app._get_count()
+
+    # Assert
+    mock_app_container.counter_controller.handle_get.assert_called_once()
+    click_cli_app._display_unknown_result_type_error.assert_called_once()
+
+
 def test_ClickCliApp_increment_count_success():
     # Arrange
     mock_counter_vm = CounterViewModel(27)
@@ -108,6 +123,21 @@ def test_ClickCliApp_increment_count_error():
     # Assert
     mock_app_container.counter_controller.handle_increment.assert_called_once()
     click_cli_app._display_error_view_model.assert_called_once_with(mock_error_vm)
+
+
+def test_ClickCliApp_increment_count_unknown_error():
+    # Arrange
+    mock_app_container: ApplicationContainer = Mock()
+    mock_app_container.counter_controller.handle_increment.return_value = None
+    click_cli_app = ClickCliApp(mock_app_container)
+    click_cli_app._display_unknown_result_type_error = Mock()
+
+    # Act
+    click_cli_app._increment_count()
+
+    # Assert
+    mock_app_container.counter_controller.handle_increment.assert_called_once()
+    click_cli_app._display_unknown_result_type_error.assert_called_once()
 
 
 # def test_ClickCliApp_display_count(capsys, click_cli_app):
