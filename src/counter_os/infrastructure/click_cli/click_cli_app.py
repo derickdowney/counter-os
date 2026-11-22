@@ -43,13 +43,15 @@ class ClickCliApp:
     def _prompt_user_interaction(self) -> None:
         user_input = click.prompt("", type=str, show_default=False).strip().lower()
 
-        match user_input:
-            case "+":
-                self._increment_count()
-            case "-":
-                self._decrement_count()
-            case _:
-                click.echo("Invalid command")
+        if user_input == "+":
+            self._increment_count()
+            return
+
+        if user_input == "-":
+            self._decrement_count()
+            return
+
+        click.echo("Invalid command")
 
     """
 
