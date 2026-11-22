@@ -21,11 +21,11 @@ class ClickCliApp:
     """
 
     def _display_counter_view_model(self, counter_vm: CounterViewModel):
-        click.echo(f"Current count is: {counter_vm.current_count}")
+        click.echo(f"Current count is: {counter_vm.current_count}\n")
 
     def _display_error_view_model(self, error_vm: ErrorViewModel):
         click.echo(f"Error: {error_vm.message}", err=True)
-        click.echo(f"Code: {error_vm.code}", err=True)
+        click.echo(f"Code: {error_vm.code}\n", err=True)
 
     def _display_unknown_result_type_error(self) -> None:
         click.echo("Something went wrong", err=True)
@@ -34,8 +34,8 @@ class ClickCliApp:
     def _display_instructions(self) -> None:
         click.echo("[+] inc  [-] dec  [<num>] set  [q] quit")
 
-    def _display_invalid_command(self) -> None:
-        click.echo("Invalid command", err=True)
+    def _display_invalid_command(self, user_input: str) -> None:
+        click.echo(f"Invalid command: '{user_input}'\n", err=True)
 
     """
 
@@ -47,21 +47,27 @@ class ClickCliApp:
         user_input = click.prompt("", type=str, show_default=False).strip().lower()
 
         if user_input == "+":
+            click.clear()
             self._increment_count()
             return
 
         if user_input == "-":
+            click.clear()
             self._decrement_count()
             return
 
         try:
+            click.clear()
             number: int = int(user_input)
             self._set_count(number)
         except ValueError:
-            self._display_invalid_command()
+            self._display_invalid_command(user_input)
+            self._get_count()
 
     def run(self) -> int:
         try:
+            click.clear()
+            self._get_count()
             while True:
                 self._display_instructions()
                 self._prompt_user_interaction()
@@ -98,6 +104,7 @@ class ClickCliApp:
         elif isinstance(op_result, OperationError):
             error_vm: ErrorViewModel = op_result.error_vm
             self._display_error_view_model(error_vm)
+            self._get_count()
         else:
             self._display_unknown_result_type_error()
 
@@ -112,6 +119,7 @@ class ClickCliApp:
         elif isinstance(op_result, OperationError):
             error_vm: ErrorViewModel = op_result.error_vm
             self._display_error_view_model(error_vm)
+            self._get_count()
         else:
             self._display_unknown_result_type_error()
 
@@ -126,6 +134,7 @@ class ClickCliApp:
         elif isinstance(op_result, OperationError):
             error_vm: ErrorViewModel = op_result.error_vm
             self._display_error_view_model(error_vm)
+            self._get_count()
         else:
             self._display_unknown_result_type_error()
 

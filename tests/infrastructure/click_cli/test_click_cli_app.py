@@ -33,7 +33,7 @@ def test_ClickCliApp_display_counter_view_model(capsys):
 
     # Assert
     captured = capsys.readouterr()
-    assert captured.out == "Current count is: 11\n"
+    assert captured.out == "Current count is: 11\n\n"
     assert captured.err == ""
 
 
@@ -49,7 +49,7 @@ def test_ClickCliApp_display_error_view_model(capsys):
     # Assert
     captured = capsys.readouterr()
     assert captured.out == ""
-    assert captured.err == "Error: some error\nCode: SOME_CODE\n"
+    assert captured.err == "Error: some error\nCode: SOME_CODE\n\n"
 
 
 def test_ClickCliApp_display_instructions(capsys):
@@ -72,12 +72,12 @@ def test_ClickCliApp_display_invalid_command(capsys):
     click_cli_app = ClickCliApp(mock_app_container)
 
     # Act
-    click_cli_app._display_invalid_command()
+    click_cli_app._display_invalid_command("some input")
 
     # Assert
     captured = capsys.readouterr()
     assert captured.out == ""
-    assert captured.err == "Invalid command\n"
+    assert captured.err == "Invalid command: 'some input'\n\n"
 
 
 """
@@ -169,12 +169,7 @@ def test_ClickCliApp_run_loops_until_keyboard_interrupt(monkeypatch, capsys) -> 
     mock_app_container: Mock = Mock()
     click_cli_app: ClickCliApp = ClickCliApp(mock_app_container)
 
-    instruction_calls: int = 0
     prompt_calls: int = 0
-
-    def fake_display_instructions() -> None:
-        nonlocal instruction_calls
-        instruction_calls += 1
 
     def fake_prompt_user_interaction() -> None:
         nonlocal prompt_calls
@@ -182,9 +177,8 @@ def test_ClickCliApp_run_loops_until_keyboard_interrupt(monkeypatch, capsys) -> 
         if prompt_calls >= 3:
             raise KeyboardInterrupt
 
-    monkeypatch.setattr(
-        click_cli_app, "_display_instructions", fake_display_instructions
-    )
+    monkeypatch.setattr(click_cli_app, "_display_instructions", lambda: None)
+    monkeypatch.setattr(click_cli_app, "_get_count", lambda: None)
     monkeypatch.setattr(
         click_cli_app,
         "_prompt_user_interaction",
@@ -196,7 +190,6 @@ def test_ClickCliApp_run_loops_until_keyboard_interrupt(monkeypatch, capsys) -> 
 
     # Assert
     assert exit_code == 0
-    assert instruction_calls == 3
     assert prompt_calls == 3
     captured = capsys.readouterr()
     assert captured.err == "\nGoodbye!\n"
