@@ -43,18 +43,21 @@ class ClickCliApp:
 
     """
 
-    def _prompt_user_interaction(self) -> None:
+    def _prompt_user_interaction(self) -> bool:
         user_input = click.prompt("", type=str, show_default=False).strip().lower()
+
+        if user_input == "q":
+            return False
 
         if user_input == "+":
             click.clear()
             self._increment_count()
-            return
+            return True
 
         if user_input == "-":
             click.clear()
             self._decrement_count()
-            return
+            return True
 
         try:
             click.clear()
@@ -64,13 +67,18 @@ class ClickCliApp:
             self._display_invalid_command(user_input)
             self._get_count()
 
+        return True
+
     def run(self) -> int:
         try:
             click.clear()
             self._get_count()
             while True:
                 self._display_instructions()
-                self._prompt_user_interaction()
+                should_continue: bool = self._prompt_user_interaction()
+                if not should_continue:
+                    click.echo("\nGoodbye!")
+                    return 0
         except KeyboardInterrupt:
             click.echo("\nGoodbye!", err=True)
             return 0

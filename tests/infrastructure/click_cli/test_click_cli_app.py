@@ -101,10 +101,11 @@ def test_ClickCliApp_prompt_user_interaction_increment_count(
     monkeypatch.setattr(click, "prompt", Mock(return_value=user_input))
 
     # Act
-    click_cli_app._prompt_user_interaction()
+    should_continue: bool = click_cli_app._prompt_user_interaction()
 
     # Assert
     click_cli_app._increment_count.assert_called_once()
+    assert should_continue == True
 
 
 @pytest.mark.parametrize(
@@ -121,10 +122,29 @@ def test_ClickCliApp_prompt_user_interaction_decrement_count(
     monkeypatch.setattr(click, "prompt", Mock(return_value=user_input))
 
     # Act
-    click_cli_app._prompt_user_interaction()
+    should_continue: bool = click_cli_app._prompt_user_interaction()
 
     # Assert
     click_cli_app._decrement_count.assert_called_once()
+    assert should_continue == True
+
+
+@pytest.mark.parametrize(
+    "user_input",
+    ["q", " q", "q ", " q "],
+)
+def test_ClickCliApp_prompt_user_interaction_quit(user_input, monkeypatch) -> None:
+    # Arrange
+    mock_app_container: ApplicationContainer = Mock()
+    click_cli_app = ClickCliApp(mock_app_container)
+    monkeypatch.setattr(click, "prompt", Mock(return_value=user_input))
+
+    # Act
+    should_continue: bool = click_cli_app._prompt_user_interaction()
+
+    # Assert
+    # click_cli_app.sys.exit.assert_called_once()
+    assert should_continue == False
 
 
 @pytest.mark.parametrize("user_input", ["0", " 1", "20 ", " 97 ", "1000000"])
@@ -138,10 +158,11 @@ def test_ClickCliApp_prompt_user_interaction_set_count_success(
     monkeypatch.setattr(click, "prompt", Mock(return_value=user_input))
 
     # Act
-    click_cli_app._prompt_user_interaction()
+    should_continue: bool = click_cli_app._prompt_user_interaction()
 
     # Assert
     click_cli_app._set_count.assert_called_once()
+    assert should_continue == True
 
 
 @pytest.mark.parametrize(
@@ -171,11 +192,12 @@ def test_ClickCliApp_run_loops_until_keyboard_interrupt(monkeypatch, capsys) -> 
 
     prompt_calls: int = 0
 
-    def fake_prompt_user_interaction() -> None:
+    def fake_prompt_user_interaction() -> bool:
         nonlocal prompt_calls
         prompt_calls += 1
         if prompt_calls >= 3:
             raise KeyboardInterrupt
+        return True
 
     monkeypatch.setattr(click_cli_app, "_display_instructions", lambda: None)
     monkeypatch.setattr(click_cli_app, "_get_count", lambda: None)
