@@ -3,21 +3,10 @@ from unittest.mock import Mock
 import pytest
 
 from counter_os.bootstrap.application_container import ApplicationContainer
-from counter_os.bootstrap.application_factory import create_application_container
 from counter_os.infrastructure.click_cli.click_cli_app import ClickCliApp
 from counter_os.interfaces.operation_result import OperationError, OperationSuccess
-from counter_os.interfaces.presenters.click_counter_presenter import (
-    ClickCounterPresenter,
-)
 from counter_os.interfaces.view_models.counter_view_model import CounterViewModel
 from counter_os.interfaces.view_models.error_view_model import ErrorViewModel
-
-# @pytest.fixture
-# def click_cli_app() -> ClickCliApp:
-#     presenter = ClickCounterPresenter()
-#     app = create_application_container(presenter)
-#     click_cli_app = ClickCliApp(app)
-#     return click_cli_app
 
 
 def test_ClickCliApp_init_requires_ApplicationContainer():
@@ -27,7 +16,7 @@ def test_ClickCliApp_init_requires_ApplicationContainer():
 
 def test_ClickCliApp_display_counter_view_model(capsys):
     # Arrange
-    mock_app_container = Mock(spec=ApplicationContainer)
+    mock_app_container: ApplicationContainer = Mock()
     click_cli_app = ClickCliApp(mock_app_container)
     counter_vm = CounterViewModel(11)
 
@@ -40,7 +29,7 @@ def test_ClickCliApp_display_counter_view_model(capsys):
 
 def test_ClickCliApp_display_error_view_model(capsys):
     # Arrange
-    mock_app_container = Mock(spec=ApplicationContainer)
+    mock_app_container: ApplicationContainer = Mock()
     click_cli_app = ClickCliApp(mock_app_container)
     error_vm = ErrorViewModel("some error", "SOME_CODE")
 
