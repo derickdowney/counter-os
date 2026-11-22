@@ -60,6 +60,15 @@ class ClickCliApp:
         except ValueError:
             self._display_invalid_command()
 
+    def run(self) -> int:
+        try:
+            while True:
+                self._display_instructions()
+                self._prompt_user_interaction()
+        except KeyboardInterrupt:
+            click.echo("\nGoodbye!", err=True)
+            return 0
+
     """
 
         USE CASES

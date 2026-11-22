@@ -164,6 +164,44 @@ def test_ClickCliApp_prompt_user_interaction_set_count_invalid(
     click_cli_app._display_invalid_command.assert_called_once()
 
 
+def test_ClickCliApp_run_loops_until_keyboard_interrupt(monkeypatch, capsys) -> None:
+    # Arrange
+    mock_app_container: Mock = Mock()
+    click_cli_app: ClickCliApp = ClickCliApp(mock_app_container)
+
+    instruction_calls: int = 0
+    prompt_calls: int = 0
+
+    def fake_display_instructions() -> None:
+        nonlocal instruction_calls
+        instruction_calls += 1
+
+    def fake_prompt_user_interaction() -> None:
+        nonlocal prompt_calls
+        prompt_calls += 1
+        if prompt_calls >= 3:
+            raise KeyboardInterrupt
+
+    monkeypatch.setattr(
+        click_cli_app, "_display_instructions", fake_display_instructions
+    )
+    monkeypatch.setattr(
+        click_cli_app,
+        "_prompt_user_interaction",
+        fake_prompt_user_interaction,
+    )
+
+    # Act
+    exit_code: int = click_cli_app.run()
+
+    # Assert
+    assert exit_code == 0
+    assert instruction_calls == 3
+    assert prompt_calls == 3
+    captured = capsys.readouterr()
+    assert captured.err == "\nGoodbye!\n"
+
+
 """
 
     GET COUNT
