@@ -21,8 +21,9 @@ class ClickCliApp:
         click.echo(f"Error: {error_vm.message}", err=True)
         click.echo(f"Code: {error_vm.code}", err=True)
 
-    def _display_unknown_error(self) -> None:
+    def _display_unknown_result_type_error(self) -> None:
         click.echo("Something went wrong", err=True)
+        click.echo("Operation resulted in neither success nor error", err=True)
 
     def _get_count(self) -> None:
         op_result: OperationResult = self.app_container.counter_controller.handle_get()
@@ -30,6 +31,11 @@ class ClickCliApp:
         if isinstance(op_result, OperationSuccess):
             counter_vm: CounterViewModel = op_result.success_vm
             self._display_counter_view_model(counter_vm)
+        elif isinstance(op_result, OperationError):
+            error_vm: ErrorViewModel = op_result.error_vm
+            self._display_error_view_model(error_vm)
+        else:
+            self._display_unknown_result_type_error()
 
     # def run(self) -> int:
     #     try:
