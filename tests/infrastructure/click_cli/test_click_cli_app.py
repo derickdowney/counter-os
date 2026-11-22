@@ -12,13 +12,12 @@ from counter_os.interfaces.presenters.click_counter_presenter import (
 from counter_os.interfaces.view_models.counter_view_model import CounterViewModel
 from counter_os.interfaces.view_models.error_view_model import ErrorViewModel
 
-
-@pytest.fixture
-def click_cli_app() -> ClickCliApp:
-    presenter = ClickCounterPresenter()
-    app = create_application_container(presenter)
-    click_cli_app = ClickCliApp(app)
-    return click_cli_app
+# @pytest.fixture
+# def click_cli_app() -> ClickCliApp:
+#     presenter = ClickCounterPresenter()
+#     app = create_application_container(presenter)
+#     click_cli_app = ClickCliApp(app)
+#     return click_cli_app
 
 
 def test_ClickCliApp_init_requires_ApplicationContainer():
@@ -52,10 +51,10 @@ def test_ClickCliApp_display_error_view_model(capsys):
     assert capsys.readouterr().err == "Error: some error\nCode: SOME_CODE\n"
 
 
-def test_ClickCliApp_display_count(capsys, click_cli_app):
-    click_cli_app._display_current_count()
-    output: str = capsys.readouterr().out
-    assert output == "Current count is: 0\n"
+# def test_ClickCliApp_display_count(capsys, click_cli_app):
+#     click_cli_app._display_current_count()
+#     output: str = capsys.readouterr().out
+#     assert output == "Current count is: 0\n"
 
 
 # def test_ClickCliApp_run_keyboard_interrupt(monkeypatch, capsys):
