@@ -14,6 +14,12 @@ class ClickCliApp:
     def __init__(self, app_container: ApplicationContainer):
         self.app_container = app_container
 
+    """
+
+        DISPLAYS
+
+    """
+
     def _display_counter_view_model(self, counter_vm: CounterViewModel):
         click.echo(f"Current count is: {counter_vm.current_count}")
 
@@ -27,6 +33,21 @@ class ClickCliApp:
 
     def _display_instructions(self) -> None:
         click.echo("[+] inc  [-] dec  [<num>] set  [q] quit")
+
+    """
+
+        RUN LOOP AND PROMPTS
+
+    """
+
+    def _prompt_user_interaction(self) -> None:
+        user_input = click.prompt("", type=str, show_default=False).strip().lower()
+
+        match user_input:
+            case "+":
+                self._increment_count()
+            case _:
+                click.echo("Invalid command")
 
     """
 

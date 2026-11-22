@@ -1,5 +1,6 @@
 from unittest.mock import Mock
 
+import click
 import pytest
 
 from counter_os.bootstrap.application_container import ApplicationContainer
@@ -12,6 +13,13 @@ from counter_os.interfaces.view_models.error_view_model import ErrorViewModel
 def test_ClickCliApp_init_requires_ApplicationContainer():
     with pytest.raises(TypeError):
         ClickCliApp()
+
+
+"""
+
+    DISPLAY
+
+"""
 
 
 def test_ClickCliApp_display_counter_view_model(capsys):
@@ -56,6 +64,31 @@ def test_ClickCliApp_display_instructions(capsys):
     captured = capsys.readouterr()
     assert captured.out == "[+] inc  [-] dec  [<num>] set  [q] quit\n"
     assert captured.err == ""
+
+
+"""
+
+    RUN LOOP AND PROMPTS
+
+"""
+
+
+@pytest.mark.parametrize(
+    "user_input",
+    ["+", " +", "+ ", " + "],
+)
+def test_ClickCliApp_prompt_user_interaction_increment(user_input, monkeypatch) -> None:
+    # Arrange
+    mock_app_container: ApplicationContainer = Mock()
+    click_cli_app = ClickCliApp(mock_app_container)
+    click_cli_app._increment_count = Mock()
+    monkeypatch.setattr(click, "prompt", Mock(return_value=user_input))
+
+    # Act
+    click_cli_app._prompt_user_interaction()
+
+    # Assert
+    click_cli_app._increment_count.assert_called_once()
 
 
 """
