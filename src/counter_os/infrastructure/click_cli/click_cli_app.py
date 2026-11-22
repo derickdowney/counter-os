@@ -65,6 +65,20 @@ class ClickCliApp:
         else:
             self._display_unknown_result_type_error()
 
+    def _set_count(self, set_value: int) -> None:
+        op_result: OperationResult = self.app_container.counter_controller.handle_set(
+            set_value
+        )
+
+        if isinstance(op_result, OperationSuccess):
+            counter_vm: CounterViewModel = op_result.success_vm
+            self._display_counter_view_model(counter_vm)
+        elif isinstance(op_result, OperationError):
+            error_vm: ErrorViewModel = op_result.error_vm
+            self._display_error_view_model(error_vm)
+        else:
+            self._display_unknown_result_type_error()
+
     # def run(self) -> int:
     #     try:
     #         self._display_current_count()

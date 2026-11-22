@@ -212,6 +212,62 @@ def test_ClickCliApp_decrement_count_unknown_error():
     click_cli_app._display_unknown_result_type_error.assert_called_once()
 
 
+"""
+
+    SET COUNT
+
+"""
+
+
+def test_ClickCliApp_set_count_success():
+    # Arrange
+    mock_counter_vm = CounterViewModel(50)
+    mock_op_success = OperationSuccess(mock_counter_vm)
+    mock_app_container: ApplicationContainer = Mock()
+    mock_app_container.counter_controller.handle_set.return_value = mock_op_success
+    click_cli_app = ClickCliApp(mock_app_container)
+    click_cli_app._display_counter_view_model = Mock()
+
+    # Act
+    click_cli_app._set_count(50)
+
+    # Assert
+    mock_app_container.counter_controller.handle_set.assert_called_once()
+    click_cli_app._display_counter_view_model.assert_called_once_with(mock_counter_vm)
+
+
+def test_ClickCliApp_set_count_error():
+    # Arrange
+    mock_error_vm = ErrorViewModel("some error", "SOME_CODE")
+    mock_op_error = OperationError(mock_error_vm)
+    mock_app_container: ApplicationContainer = Mock()
+    mock_app_container.counter_controller.handle_set.return_value = mock_op_error
+    click_cli_app = ClickCliApp(mock_app_container)
+    click_cli_app._display_error_view_model = Mock()
+
+    # Act
+    click_cli_app._set_count(-1)
+
+    # Assert
+    mock_app_container.counter_controller.handle_set.assert_called_once()
+    click_cli_app._display_error_view_model.assert_called_once_with(mock_error_vm)
+
+
+def test_ClickCliApp_set_count_unknown_error():
+    # Arrange
+    mock_app_container: ApplicationContainer = Mock()
+    mock_app_container.counter_controller.handle_set.return_value = None
+    click_cli_app = ClickCliApp(mock_app_container)
+    click_cli_app._display_unknown_result_type_error = Mock()
+
+    # Act
+    click_cli_app._set_count(50)
+
+    # Assert
+    mock_app_container.counter_controller.handle_set.assert_called_once()
+    click_cli_app._display_unknown_result_type_error.assert_called_once()
+
+
 # def test_ClickCliApp_display_count(capsys, click_cli_app):
 #     click_cli_app._display_current_count()
 #     output: str = capsys.readouterr().out
