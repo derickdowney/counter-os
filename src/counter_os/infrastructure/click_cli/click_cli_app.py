@@ -46,6 +46,8 @@ class ClickCliApp:
         match user_input:
             case "+":
                 self._increment_count()
+            case "-":
+                self._decrement_count()
             case _:
                 click.echo("Invalid command")
 

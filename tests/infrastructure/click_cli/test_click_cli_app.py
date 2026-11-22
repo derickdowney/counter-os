@@ -91,6 +91,24 @@ def test_ClickCliApp_prompt_user_interaction_increment(user_input, monkeypatch) 
     click_cli_app._increment_count.assert_called_once()
 
 
+@pytest.mark.parametrize(
+    "user_input",
+    ["-", " -", "- ", " - "],
+)
+def test_ClickCliApp_prompt_user_interaction_decrement(user_input, monkeypatch) -> None:
+    # Arrange
+    mock_app_container: ApplicationContainer = Mock()
+    click_cli_app = ClickCliApp(mock_app_container)
+    click_cli_app._decrement_count = Mock()
+    monkeypatch.setattr(click, "prompt", Mock(return_value=user_input))
+
+    # Act
+    click_cli_app._prompt_user_interaction()
+
+    # Assert
+    click_cli_app._decrement_count.assert_called_once()
+
+
 """
 
     GET COUNT
