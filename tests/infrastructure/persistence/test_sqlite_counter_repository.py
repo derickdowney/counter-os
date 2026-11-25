@@ -4,6 +4,7 @@ import sqlalchemy.orm
 
 from counter_os.infrastructure.persistence.sqlite_counter_repository import (
     Base,
+    SqliteCounter,
     SqliteCounterRepository,
 )
 
@@ -67,3 +68,12 @@ def test_SqliteCounterRepository_creates_SQLAlchemy_engine():
 def test_Base_inherits_from_DeclarativeBase():
     base = Base()
     assert isinstance(base, sa.orm.DeclarativeBase)
+
+
+def test_SqliteCounter_inherits_from_Base():
+    sqlite_counter = SqliteCounter()
+    assert isinstance(sqlite_counter, Base)
+
+
+def test_SqliteCounter_has_count_arg():
+    SqliteCounter(id=1, count=10)

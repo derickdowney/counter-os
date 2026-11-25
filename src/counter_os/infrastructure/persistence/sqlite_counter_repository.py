@@ -38,3 +38,12 @@ def validate_relative_file_path_arg(relative_file_path: str):
 
 class Base(sa.orm.DeclarativeBase):
     pass
+
+
+class SqliteCounter(Base):
+    """SQL Alchemy ORM class for "counters" table"""
+
+    __tablename__ = "counters"
+
+    id: sa.orm.Mapped[int] = sa.orm.mapped_column(primary_key=True)
+    count: sa.orm.Mapped[int]
