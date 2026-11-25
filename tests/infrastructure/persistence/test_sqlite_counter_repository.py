@@ -27,7 +27,7 @@ def test_SqliteCounterRepository_relative_file_path_cannot_be_empty():
 
 @pytest.mark.parametrize(
     "invalid_char",
-    ["/", "\\", ":", "*", "?", '"', "<", ">", "|"],
+    ["\\", ":", "*", "?", '"', "<", ">", "|"],
 )
 def test_SqliteCounterRepository_relative_file_path_cannot_contain_invalid_chars(
     invalid_char,

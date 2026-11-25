@@ -13,7 +13,7 @@ def validate_relative_file_path_arg(relative_file_path: str):
     if relative_file_path == "":
         raise ValueError("`relative_file_path` arg cannot be empty string")
 
-    invalid_chars: list[str] = ["/", "\\", ":", "*", "?", '"', "<", ">", "|"]
+    invalid_chars: list[str] = ["\\", ":", "*", "?", '"', "<", ">", "|"]
     for invalid_char in invalid_chars:
         if invalid_char in relative_file_path:
             raise ValueError(
