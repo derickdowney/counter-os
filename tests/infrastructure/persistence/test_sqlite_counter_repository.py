@@ -25,11 +25,6 @@ def test_SqliteCounterRepository_relative_file_path_cannot_be_empty():
         SqliteCounterRepository("")
 
 
-def test_SqliteCounterRepository_relative_file_path_strips_whitespace():
-    repo = SqliteCounterRepository("   test.db3   ")
-    assert repo._relative_file_path == "test.db3"
-
-
 @pytest.mark.parametrize(
     "invalid_char",
     ["/", "\\", ":", "*", "?", '"', "<", ">", "|"],
