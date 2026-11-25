@@ -3,6 +3,7 @@ import sqlalchemy.orm
 
 from counter_os.domain.entities.counter import Counter
 from counter_os.domain.repositories.counter_repository import CounterRepository
+from counter_os.domain.value_objects.count import Count
 
 
 class SqliteCounterRepository(CounterRepository):
@@ -19,7 +20,16 @@ class SqliteCounterRepository(CounterRepository):
         pass
 
     def get(self) -> Counter:
-        pass
+        with self._session_factory() as session:
+            record = session.get(SqliteCounter, 1)
+
+            if record is not None:
+                return Counter(Count(record.count))
+
+            new_record = SqliteCounter(id=1, count=0)
+            session.add(new_record)
+            session.commit()
+            return Counter(Count(new_record.count))
 
 
 def validate_relative_file_path_arg(relative_file_path: str):

@@ -2,6 +2,7 @@ import pytest
 import sqlalchemy as sa
 import sqlalchemy.orm
 
+from counter_os.domain.entities.counter import Counter
 from counter_os.domain.repositories.counter_repository import CounterRepository
 from counter_os.infrastructure.persistence.sqlite_counter_repository import (
     Base,
@@ -107,3 +108,32 @@ def test_SqliteCounterRepository_creates_database_file(tmp_path, monkeypatch):
 
     # Assert
     assert expected_db_file.is_file()
+
+
+def test_SqliteCounterRepository_get_creates_row_if_not_exist(tmp_path, monkeypatch):
+    # Arrange
+    monkeypatch.chdir(tmp_path)
+    engine = sa.create_engine("sqlite+pysqlite:///test.db3")
+    Base.metadata.create_all(engine)
+    with sa.orm.Session(engine) as session:
+        row_count = session.scalar(
+            sa.select(sa.func.count()).select_from(SqliteCounter)
+        )
+        assert row_count == 0
+    sqlite_counter_repo = SqliteCounterRepository("test.db3")
+    with sa.orm.Session(engine) as session:
+        row_count = session.scalar(
+            sa.select(sa.func.count()).select_from(SqliteCounter)
+        )
+        assert row_count == 0
+
+    # Act
+    counter: Counter = sqlite_counter_repo.get()
+
+    # Assert
+    assert counter.count.value == 0
+    with sa.orm.Session(engine) as session:
+        row_count = session.scalar(
+            sa.select(sa.func.count()).select_from(SqliteCounter)
+        )
+        assert row_count == 1
