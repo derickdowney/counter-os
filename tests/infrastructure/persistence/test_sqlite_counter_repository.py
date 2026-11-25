@@ -137,3 +137,27 @@ def test_SqliteCounterRepository_get_creates_row_if_not_exist(tmp_path, monkeypa
             sa.select(sa.func.count()).select_from(SqliteCounter)
         )
         assert row_count == 1
+
+
+def test_SqliteCounterRepository_get_returns_value_of_existing_row(
+    tmp_path, monkeypatch
+):
+    # Arrange
+    monkeypatch.chdir(tmp_path)
+    engine = sa.create_engine("sqlite+pysqlite:///test.db3")
+    Base.metadata.create_all(engine)
+    with sa.orm.Session(engine) as session:
+        session.add(SqliteCounter(id=1, count=42))
+        session.commit()
+    sqlite_counter_repo = SqliteCounterRepository("test.db3")
+
+    # Act
+    counter: Counter = sqlite_counter_repo.get()
+
+    # Assert
+    assert counter.count.value == 42
+    with sa.orm.Session(engine) as session:
+        row_count = session.scalar(
+            sa.select(sa.func.count()).select_from(SqliteCounter)
+        )
+        assert row_count == 1

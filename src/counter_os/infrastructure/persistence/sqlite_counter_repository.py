@@ -22,7 +22,6 @@ class SqliteCounterRepository(CounterRepository):
     def get(self) -> Counter:
         with self._session_factory() as session:
             record = session.get(SqliteCounter, 1)
-
             if record is not None:
                 return Counter(Count(record.count))
 
