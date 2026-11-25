@@ -45,3 +45,12 @@ def test_SqliteCounterRepository_relative_file_path_cannot_contain_invalid_chars
 def test_SqliteCounterRepository_relative_file_path_cannot_contain_spaces():
     with pytest.raises(ValueError):
         SqliteCounterRepository("test file.db3")
+
+
+def test_SqliteCounterRepository_relative_file_path_must_end_with_db3_or_db():
+    SqliteCounterRepository("test.db")
+    SqliteCounterRepository("test.db3")
+    with pytest.raises(ValueError):
+        SqliteCounterRepository("test")
+    with pytest.raises(ValueError):
+        SqliteCounterRepository("test.d")

@@ -21,4 +21,7 @@ class SqliteCounterRepository:
         if " " in stripped_path:
             raise ValueError("`relative_file_path` arg cannot contain spaces")
 
+        if not stripped_path.endswith(".db") and not stripped_path.endswith(".db3"):
+            raise ValueError("`relative_file_path` arg must end with `.db` or `.db3`")
+
         self._relative_file_path = stripped_path
