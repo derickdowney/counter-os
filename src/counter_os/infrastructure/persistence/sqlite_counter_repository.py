@@ -15,10 +15,19 @@ class SqliteCounterRepository(CounterRepository):
         engine = sa.create_engine(sa_engine_config_url)
         Base.metadata.create_all(engine)
         self._session_factory = sa.orm.sessionmaker(bind=engine)
+        with self._session_factory() as session:
+            record = session.get(SqliteCounter, 1)
+            if record is None:
+                session.add(SqliteCounter(id=1, count=0))
+                session.commit()
 
     def save(self, counter: Counter) -> None:
         with self._session_factory() as session:
-            session.add(SqliteCounter(id=1, count=counter.count.value))
+            record = session.get(SqliteCounter, 1)
+            if record is not None:
+                record.count = counter.count.value
+            else:
+                session.add(SqliteCounter(id=1, count=counter.count.value))
             session.commit()
 
     def get(self) -> Counter:

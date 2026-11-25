@@ -111,33 +111,21 @@ def test_SqliteCounterRepository_creates_database_file(tmp_path, monkeypatch):
     assert expected_db_file.is_file()
 
 
-def test_SqliteCounterRepository_get_creates_row_if_not_exist(tmp_path, monkeypatch):
+def test_SqliteCounterRepository_init_ensures_database_file_has_row_(
+    tmp_path, monkeypatch
+):
     # Arrange
     monkeypatch.chdir(tmp_path)
-    engine = sa.create_engine("sqlite+pysqlite:///test.db3")
-    Base.metadata.create_all(engine)
-    with sa.orm.Session(engine) as session:
-        row_count = session.scalar(
-            sa.select(sa.func.count()).select_from(SqliteCounter)
-        )
-        assert row_count == 0
-    sqlite_counter_repo = SqliteCounterRepository("test.db3")
-    with sa.orm.Session(engine) as session:
-        row_count = session.scalar(
-            sa.select(sa.func.count()).select_from(SqliteCounter)
-        )
-        assert row_count == 0
 
     # Act
-    counter: Counter = sqlite_counter_repo.get()
+    SqliteCounterRepository("test.db3")
 
     # Assert
-    assert counter.count.value == 0
+    engine = sa.create_engine("sqlite+pysqlite:///test.db3")
     with sa.orm.Session(engine) as session:
-        row_count = session.scalar(
-            sa.select(sa.func.count()).select_from(SqliteCounter)
-        )
-        assert row_count == 1
+        record = session.get(SqliteCounter, 1)
+        assert isinstance(record, SqliteCounter)
+        assert record.count == 0
 
 
 def test_SqliteCounterRepository_get_returns_value_of_existing_row(
@@ -177,6 +165,7 @@ def test_SqliteCounterRepository_save_updates_database_file(tmp_path, monkeypatc
     Base.metadata.create_all(engine)
     with sa.orm.Session(engine) as session:
         record = session.get(SqliteCounter, 1)
+        assert isinstance(record, SqliteCounter)
         assert record.count == 27
 
         row_count = session.scalar(
