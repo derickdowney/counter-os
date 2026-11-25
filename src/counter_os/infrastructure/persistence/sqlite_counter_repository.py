@@ -1,4 +1,5 @@
 import sqlalchemy as sa
+import sqlalchemy.orm
 
 
 class SqliteCounterRepository:
@@ -33,3 +34,7 @@ def validate_relative_file_path_arg(relative_file_path: str):
 
     if relative_file_path.startswith("/"):
         raise ValueError("`relative_file_path` arg cannot begin with `/`")
+
+
+class Base(sa.orm.DeclarativeBase):
+    pass

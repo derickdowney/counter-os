@@ -1,7 +1,9 @@
 import pytest
 import sqlalchemy as sa
+import sqlalchemy.orm
 
 from counter_os.infrastructure.persistence.sqlite_counter_repository import (
+    Base,
     SqliteCounterRepository,
 )
 
@@ -60,3 +62,8 @@ def test_SqliteCounterRepository_relative_file_path_must_end_with_db3_or_db():
 def test_SqliteCounterRepository_creates_SQLAlchemy_engine():
     repo = SqliteCounterRepository("test.db3")
     assert isinstance(repo._engine, sa.Engine)
+
+
+def test_Base_inherits_from_DeclarativeBase():
+    base = Base()
+    assert isinstance(base, sa.orm.DeclarativeBase)
