@@ -2,6 +2,7 @@ import pytest
 import sqlalchemy as sa
 import sqlalchemy.orm
 
+from counter_os.domain.repositories.counter_repository import CounterRepository
 from counter_os.infrastructure.persistence.sqlite_counter_repository import (
     Base,
     SqliteCounter,
@@ -77,3 +78,8 @@ def test_SqliteCounter_inherits_from_Base():
 
 def test_SqliteCounter_has_count_arg():
     SqliteCounter(id=1, count=10)
+
+
+def test_SqliteCounterRepository_inherits_from_CounterRepository():
+    repo = SqliteCounterRepository("test.db3")
+    assert isinstance(repo, CounterRepository)

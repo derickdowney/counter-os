@@ -1,14 +1,23 @@
 import sqlalchemy as sa
 import sqlalchemy.orm
 
+from counter_os.domain.entities.counter import Counter
+from counter_os.domain.repositories.counter_repository import CounterRepository
 
-class SqliteCounterRepository:
+
+class SqliteCounterRepository(CounterRepository):
     _engine: sa.Engine
 
     def __init__(self, relative_file_path: str):
         validate_relative_file_path_arg(relative_file_path)
         sa_engine_config_url = "sqlite+pysqlite:///" + relative_file_path
         self._engine = sa.create_engine(sa_engine_config_url)
+
+    def save(self, counter: Counter) -> None:
+        pass
+
+    def get(self) -> Counter:
+        pass
 
 
 def validate_relative_file_path_arg(relative_file_path: str):
