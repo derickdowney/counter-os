@@ -29,15 +29,17 @@ def test_CounterSetUseCase_is_immutable(counter_repository):
 
 
 def test_CounterSetUseCase_successfully_sets_counter_to_requested_value():
-    counter_repo: Mock = Mock(spec=CounterRepository)
-    counter_repo.get.return_value = Counter(Count(0))
+    mock_counter_repo: Mock = Mock(spec=CounterRepository)
+    mock_counter_repo.get.return_value = Counter(Count(0))
+    mock_counter_repo.set = Mock()
 
-    use_case: CounterSetUseCase = CounterSetUseCase(counter_repo)
+    use_case: CounterSetUseCase = CounterSetUseCase(mock_counter_repo)
     request: CounterSetRequest = CounterSetRequest(50)
     result: Result = use_case.execute(request)
     assert isinstance(result, Success)
     assert isinstance(result.success_response, CounterResponse)
     assert result.success_response.current_count == 50
+    mock_counter_repo.save.assert_called_once_with(Counter(Count(50)))
 
 
 def test_CounterSetUseCase_raises_error_when_set_to_negative_number():

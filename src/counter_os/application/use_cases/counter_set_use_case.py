@@ -23,6 +23,7 @@ class CounterSetUseCase:
         try:
             params: dict[str, Any] = request.to_execution_params()
             counter.count = params["count"]
+            self.counter_repository.save(counter)
             return Success(CounterResponse.from_entity(counter))
         except CountCannotBeNegative:
             return Error(ErrorResponse.count_cannot_be_negative(request.count))
