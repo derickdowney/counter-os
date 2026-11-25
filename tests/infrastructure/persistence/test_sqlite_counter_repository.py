@@ -13,3 +13,8 @@ def test_SqliteCounterRepository_cannot_init_without_args():
 def test_SqliteCounterRepository_init_requires_relative_file_path():
     repo = SqliteCounterRepository("test.db3")
     assert isinstance(repo, SqliteCounterRepository)
+
+
+def test_SqliteCounterRepository_cannot_init_with_non_string():
+    with pytest.raises(TypeError):
+        SqliteCounterRepository(1234)
