@@ -17,7 +17,9 @@ class SqliteCounterRepository(CounterRepository):
         self._session_factory = sa.orm.sessionmaker(bind=engine)
 
     def save(self, counter: Counter) -> None:
-        pass
+        with self._session_factory() as session:
+            session.add(SqliteCounter(id=1, count=counter.count.value))
+            session.commit()
 
     def get(self) -> Counter:
         with self._session_factory() as session:

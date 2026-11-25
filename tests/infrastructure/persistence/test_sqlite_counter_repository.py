@@ -4,6 +4,7 @@ import sqlalchemy.orm
 
 from counter_os.domain.entities.counter import Counter
 from counter_os.domain.repositories.counter_repository import CounterRepository
+from counter_os.domain.value_objects.count import Count
 from counter_os.infrastructure.persistence.sqlite_counter_repository import (
     Base,
     SqliteCounter,
@@ -157,6 +158,27 @@ def test_SqliteCounterRepository_get_returns_value_of_existing_row(
     # Assert
     assert counter.count.value == 42
     with sa.orm.Session(engine) as session:
+        row_count = session.scalar(
+            sa.select(sa.func.count()).select_from(SqliteCounter)
+        )
+        assert row_count == 1
+
+
+def test_SqliteCounterRepository_save_updates_database_file(tmp_path, monkeypatch):
+    # Arrange
+    monkeypatch.chdir(tmp_path)
+    sqlite_counter_repo = SqliteCounterRepository("test.db3")
+
+    # Act
+    sqlite_counter_repo.save(Counter(Count(27)))
+
+    # Assert
+    engine = sa.create_engine("sqlite+pysqlite:///test.db3")
+    Base.metadata.create_all(engine)
+    with sa.orm.Session(engine) as session:
+        record = session.get(SqliteCounter, 1)
+        assert record.count == 27
+
         row_count = session.scalar(
             sa.select(sa.func.count()).select_from(SqliteCounter)
         )
