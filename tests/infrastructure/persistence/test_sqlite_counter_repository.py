@@ -37,6 +37,11 @@ def test_SqliteCounterRepository_relative_file_path_cannot_contain_invalid_chars
         SqliteCounterRepository(invalid_path)
 
 
+def test_SqliteCounterRepository_relative_file_path_cannot_start_with_forward_slash():
+    with pytest.raises(ValueError):
+        SqliteCounterRepository("/test.db3")
+
+
 def test_SqliteCounterRepository_relative_file_path_cannot_contain_spaces():
     with pytest.raises(ValueError):
         SqliteCounterRepository("test file.db3")
