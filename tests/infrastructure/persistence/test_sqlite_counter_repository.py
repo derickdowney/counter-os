@@ -1,4 +1,5 @@
 import pytest
+import sqlalchemy as sa
 
 from counter_os.infrastructure.persistence.sqlite_counter_repository import (
     SqliteCounterRepository,
@@ -54,3 +55,8 @@ def test_SqliteCounterRepository_relative_file_path_must_end_with_db3_or_db():
         SqliteCounterRepository("test")
     with pytest.raises(ValueError):
         SqliteCounterRepository("test.d")
+
+
+def test_SqliteCounterRepository_creates_SQLAlchemy_engine():
+    repo = SqliteCounterRepository("test.db3")
+    assert isinstance(repo._engine, sa.Engine)

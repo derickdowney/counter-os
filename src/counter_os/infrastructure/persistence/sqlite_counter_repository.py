@@ -1,9 +1,13 @@
+import sqlalchemy as sa
+
+
 class SqliteCounterRepository:
-    _relative_file_path: str
+    _engine: sa.Engine
 
     def __init__(self, relative_file_path: str):
         validate_relative_file_path_arg(relative_file_path)
-        self._relative_file_path = relative_file_path
+        sa_engine_config_url = "sqlite+pysqlite:///" + relative_file_path
+        self._engine = sa.create_engine(sa_engine_config_url)
 
 
 def validate_relative_file_path_arg(relative_file_path: str):
