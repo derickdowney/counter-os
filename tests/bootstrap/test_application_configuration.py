@@ -2,15 +2,19 @@ from dataclasses import FrozenInstanceError
 
 import pytest
 
+import counter_os.bootstrap.application_configuration
 from counter_os.bootstrap.application_configuration import ApplicationConfiguration
 from counter_os.infrastructure.persistence.repository_type import RepositoryType
 
 
 def test_ApplicationConfiguration_use_default_settings_when_no_env_file(monkeypatch):
     monkeypatch.delenv("COUNTER_REPOSITORY_TYPE", raising=False)
-
+    monkeypatch.setattr(
+        counter_os.bootstrap.application_configuration,
+        "load_dotenv",
+        lambda *args, **kwargs: False,
+    )
     settings: ApplicationConfiguration = ApplicationConfiguration.from_environment()
-
     assert settings.counter_repository_type == RepositoryType.MEMORY
 
 
