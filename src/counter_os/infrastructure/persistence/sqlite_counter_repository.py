@@ -17,4 +17,8 @@ class SqliteCounterRepository:
                 )
 
         stripped_path: str = relative_file_path.strip()
+
+        if " " in stripped_path:
+            raise ValueError("`relative_file_path` arg cannot contain spaces")
+
         self._relative_file_path = stripped_path
