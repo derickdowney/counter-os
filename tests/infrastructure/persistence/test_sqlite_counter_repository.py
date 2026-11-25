@@ -28,3 +28,15 @@ def test_SqliteCounterRepository_relative_file_path_cannot_be_empty():
 def test_SqliteCounterRepository_relative_file_path_strips_whitespace():
     repo = SqliteCounterRepository("   test.db3   ")
     assert repo._relative_file_path == "test.db3"
+
+
+@pytest.mark.parametrize(
+    "invalid_char",
+    ["/", "\\", ":", "*", "?", '"', "<", ">", "|"],
+)
+def test_SqliteCounterRepository_relative_file_path_cannot_contain_invalid_chars(
+    invalid_char,
+):
+    invalid_path: str = "test" + invalid_char + "file.db3"
+    with pytest.raises(ValueError):
+        SqliteCounterRepository(invalid_path)
