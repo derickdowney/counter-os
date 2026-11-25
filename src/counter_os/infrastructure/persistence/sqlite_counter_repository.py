@@ -12,6 +12,7 @@ class SqliteCounterRepository(CounterRepository):
         validate_relative_file_path_arg(relative_file_path)
         sa_engine_config_url = "sqlite+pysqlite:///" + relative_file_path
         engine = sa.create_engine(sa_engine_config_url)
+        Base.metadata.create_all(engine)
         self._session_factory = sa.orm.sessionmaker(bind=engine)
 
     def save(self, counter: Counter) -> None:

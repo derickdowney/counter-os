@@ -10,13 +10,19 @@ from counter_os.infrastructure.persistence.sqlite_counter_repository import (
 )
 
 
+@pytest.fixture
+def sqlite_counter_repo(tmp_path, monkeypatch) -> SqliteCounterRepository:
+    monkeypatch.chdir(tmp_path)
+    return SqliteCounterRepository("test.db3")
+
+
 def test_SqliteCounterRepository_cannot_init_without_args():
     with pytest.raises(TypeError):
         SqliteCounterRepository()
 
 
-def test_SqliteCounterRepository_init_requires_relative_file_path():
-    repo = SqliteCounterRepository("test.db3")
+def test_SqliteCounterRepository_init_requires_relative_file_path(sqlite_counter_repo):
+    repo = sqlite_counter_repo
     assert isinstance(repo, SqliteCounterRepository)
 
 
@@ -52,7 +58,10 @@ def test_SqliteCounterRepository_relative_file_path_cannot_contain_spaces():
         SqliteCounterRepository("test file.db3")
 
 
-def test_SqliteCounterRepository_relative_file_path_must_end_with_db3_or_db():
+def test_SqliteCounterRepository_relative_file_path_must_end_with_db3_or_db(
+    tmp_path, monkeypatch
+):
+    monkeypatch.chdir(tmp_path)
     SqliteCounterRepository("test.db")
     SqliteCounterRepository("test.db3")
     with pytest.raises(ValueError):
@@ -61,8 +70,8 @@ def test_SqliteCounterRepository_relative_file_path_must_end_with_db3_or_db():
         SqliteCounterRepository("test.d")
 
 
-def test_SqliteCounterRepository_creates_session_factory():
-    repo = SqliteCounterRepository("test.db3")
+def test_SqliteCounterRepository_creates_session_factory(sqlite_counter_repo):
+    repo = sqlite_counter_repo
     assert isinstance(repo._session_factory, sa.orm.sessionmaker)
 
 
@@ -80,6 +89,21 @@ def test_SqliteCounter_has_count_arg():
     SqliteCounter(id=1, count=10)
 
 
-def test_SqliteCounterRepository_inherits_from_CounterRepository():
-    repo = SqliteCounterRepository("test.db3")
+def test_SqliteCounterRepository_inherits_from_CounterRepository(
+    sqlite_counter_repo,
+):
+    repo = sqlite_counter_repo
     assert isinstance(repo, CounterRepository)
+
+
+def test_SqliteCounterRepository_creates_database_file(tmp_path, monkeypatch):
+    # Arrange
+    monkeypatch.chdir(tmp_path)
+    expected_db_file = tmp_path / "test.db3"
+    assert not expected_db_file.is_file()
+
+    # Act
+    SqliteCounterRepository("test.db3")
+
+    # Assert
+    assert expected_db_file.is_file()
