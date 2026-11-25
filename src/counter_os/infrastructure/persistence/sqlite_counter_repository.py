@@ -7,3 +7,6 @@ class SqliteCounterRepository:
 
         if relative_file_path == "":
             raise ValueError("`relative_file_path` arg cannot be empty string")
+
+        stripped_path: str = relative_file_path.strip()
+        self._relative_file_path = stripped_path
