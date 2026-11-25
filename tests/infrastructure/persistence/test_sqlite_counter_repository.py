@@ -61,9 +61,9 @@ def test_SqliteCounterRepository_relative_file_path_must_end_with_db3_or_db():
         SqliteCounterRepository("test.d")
 
 
-def test_SqliteCounterRepository_creates_SQLAlchemy_engine():
+def test_SqliteCounterRepository_creates_SQLAlchemy_ORM_Session():
     repo = SqliteCounterRepository("test.db3")
-    assert isinstance(repo._engine, sa.Engine)
+    assert isinstance(repo._session, sa.orm.Session)
 
 
 def test_Base_inherits_from_DeclarativeBase():

@@ -6,12 +6,13 @@ from counter_os.domain.repositories.counter_repository import CounterRepository
 
 
 class SqliteCounterRepository(CounterRepository):
-    _engine: sa.Engine
+    _session: sa.orm.Session
 
     def __init__(self, relative_file_path: str):
         validate_relative_file_path_arg(relative_file_path)
         sa_engine_config_url = "sqlite+pysqlite:///" + relative_file_path
-        self._engine = sa.create_engine(sa_engine_config_url)
+        _engine = sa.create_engine(sa_engine_config_url)
+        self._session = sa.orm.Session(_engine)
 
     def save(self, counter: Counter) -> None:
         pass
