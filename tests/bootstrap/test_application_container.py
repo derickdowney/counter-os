@@ -28,6 +28,12 @@ def counter_repository():
         def get(self):
             pass
 
+        def repository_type(self):
+            pass
+
+        def repository_location(self):
+            pass
+
     return FakeCounterRepo()
 
 

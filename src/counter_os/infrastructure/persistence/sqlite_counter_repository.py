@@ -4,13 +4,16 @@ import sqlalchemy.orm
 from counter_os.domain.entities.counter import Counter
 from counter_os.domain.repositories.counter_repository import CounterRepository
 from counter_os.domain.value_objects.count import Count
+from counter_os.infrastructure.persistence.repository_type import RepositoryType
 
 
 class SqliteCounterRepository(CounterRepository):
     _session_factory: sa.orm.sessionmaker
+    _relative_file_path: str
 
     def __init__(self, relative_file_path: str):
         validate_relative_file_path_arg(relative_file_path)
+        self._relative_file_path = relative_file_path
         sa_engine_config_url = "sqlite+pysqlite:///" + relative_file_path
         engine = sa.create_engine(sa_engine_config_url)
         Base.metadata.create_all(engine)
@@ -40,6 +43,12 @@ class SqliteCounterRepository(CounterRepository):
             session.add(new_record)
             session.commit()
             return Counter(Count(new_record.count))
+
+    def repository_type(self) -> str:
+        return RepositoryType.SQLITE_LOCAL
+
+    def repository_location(self) -> str:
+        return self._relative_file_path
 
 
 def validate_relative_file_path_arg(relative_file_path: str):

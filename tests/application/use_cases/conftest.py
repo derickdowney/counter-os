@@ -19,4 +19,10 @@ def counter_repository(counter):
         def get(self) -> Counter:
             return self._counter
 
+        def repository_type(self):
+            pass
+
+        def repository_location(self):
+            pass
+
     return TestCounterRepository(counter)

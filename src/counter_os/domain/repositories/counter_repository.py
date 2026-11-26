@@ -11,3 +11,11 @@ class CounterRepository(ABC):
     @abstractmethod
     def get(self) -> Counter:
         pass
+
+    @abstractmethod
+    def repository_type(self) -> str:
+        pass
+
+    @abstractmethod
+    def repository_location(self) -> str:
+        pass

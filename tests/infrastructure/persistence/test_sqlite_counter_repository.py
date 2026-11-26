@@ -172,3 +172,10 @@ def test_SqliteCounterRepository_save_updates_database_file(tmp_path, monkeypatc
             sa.select(sa.func.count()).select_from(SqliteCounter)
         )
         assert row_count == 1
+
+
+def test_SqliteCounterRepository_returns_correct_repo_info(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    counter_repository = SqliteCounterRepository("some_location.db3")
+    assert counter_repository.repository_type() == "sqlite_local"
+    assert counter_repository.repository_location() == "some_location.db3"
