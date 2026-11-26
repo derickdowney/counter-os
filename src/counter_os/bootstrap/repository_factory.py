@@ -15,6 +15,6 @@ def create_repositories() -> tuple[CounterRepository]:
         case RepositoryType.MEMORY:
             return (InMemoryCounterRepository(),)
         case RepositoryType.SQLITE_LOCAL:
-            return (SqliteCounterRepository("test.db3"),)
+            return (SqliteCounterRepository(settings.counter_repository_location),)
         case _:
             return (InMemoryCounterRepository(),)

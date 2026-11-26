@@ -9,6 +9,7 @@ from counter_os.infrastructure.persistence.repository_type import RepositoryType
 @dataclass(frozen=True)
 class ApplicationConfiguration:
     counter_repository_type: str
+    counter_repository_location: str
 
     @classmethod
     def from_environment(cls) -> ApplicationConfiguration:
@@ -18,5 +19,8 @@ class ApplicationConfiguration:
         return cls(
             counter_repository_type=os.getenv(
                 "COUNTER_REPOSITORY_TYPE", RepositoryType.MEMORY
-            )
+            ),
+            counter_repository_location=os.getenv(
+                "COUNTER_REPOSITORY_LOCATION", "data.sqlite3"
+            ),
         )
