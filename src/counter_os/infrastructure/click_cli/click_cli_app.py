@@ -84,6 +84,7 @@ class ClickCliApp:
     def run(self) -> int:
         try:
             click.clear()
+            self._display_counter_repository_info()
             self._get_count()
             while True:
                 self._display_instructions()

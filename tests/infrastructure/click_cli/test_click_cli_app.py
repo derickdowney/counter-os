@@ -213,21 +213,51 @@ def test_ClickCliApp_run_loops_until_keyboard_interrupt(monkeypatch, capsys) -> 
     mock_app_container: Mock = Mock()
     click_cli_app: ClickCliApp = ClickCliApp(mock_app_container)
 
-    prompt_calls: int = 0
+    # Arrange - _display_counter_repository_info()
+    display_counter_repository_info_calls: int = 0
 
-    def fake_prompt_user_interaction() -> bool:
-        nonlocal prompt_calls
-        prompt_calls += 1
-        if prompt_calls >= 3:
+    def fake_counter_repo_info() -> None:
+        nonlocal display_counter_repository_info_calls
+        display_counter_repository_info_calls += 1
+
+    monkeypatch.setattr(
+        click_cli_app, "_display_counter_repository_info", fake_counter_repo_info
+    )
+
+    # Arrange - _get_count()
+    get_count_calls: int = 0
+
+    def fake_get_count() -> None:
+        nonlocal get_count_calls
+        get_count_calls += 1
+
+    monkeypatch.setattr(click_cli_app, "_get_count", fake_get_count)
+
+    # Arrange - _display_instructions()
+    display_instructions_calls: int = 0
+
+    def fake_display_instructions() -> None:
+        nonlocal display_instructions_calls
+        display_instructions_calls += 1
+
+    monkeypatch.setattr(
+        click_cli_app, "_display_instructions", fake_display_instructions
+    )
+
+    # Arrange - _prompt_user_interaction()
+    prompt_user_calls: int = 0
+
+    def fake_prompt_user() -> bool:
+        nonlocal prompt_user_calls
+        prompt_user_calls += 1
+        if prompt_user_calls >= 3:
             raise KeyboardInterrupt
         return True
 
-    monkeypatch.setattr(click_cli_app, "_display_instructions", lambda: None)
-    monkeypatch.setattr(click_cli_app, "_get_count", lambda: None)
     monkeypatch.setattr(
         click_cli_app,
         "_prompt_user_interaction",
-        fake_prompt_user_interaction,
+        fake_prompt_user,
     )
 
     # Act
@@ -235,7 +265,10 @@ def test_ClickCliApp_run_loops_until_keyboard_interrupt(monkeypatch, capsys) -> 
 
     # Assert
     assert exit_code == 0
-    assert prompt_calls == 3
+    assert get_count_calls == 1
+    assert display_counter_repository_info_calls == 1
+    assert display_instructions_calls == 3
+    assert prompt_user_calls == 3
     captured = capsys.readouterr()
     assert captured.err == "\nGoodbye!\n"
 
