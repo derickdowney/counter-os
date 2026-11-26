@@ -1,3 +1,5 @@
+import os
+
 import click
 
 from counter_os.bootstrap.application_container import ApplicationContainer
@@ -36,6 +38,16 @@ class ClickCliApp:
 
     def _display_invalid_command(self, user_input: str) -> None:
         click.echo(f"Invalid command: '{user_input}'\n", err=True)
+
+    def _display_counter_repository_info(self) -> None:
+        click.echo(
+            "Counter repository type: "
+            + self.app_container.counter_repository.repository_type()
+        )
+        click.echo(
+            "Counter repository location: "
+            + self.app_container.counter_repository.repository_location()
+        )
 
     """
 

@@ -80,6 +80,29 @@ def test_ClickCliApp_display_invalid_command(capsys):
     assert captured.err == "Invalid command: 'some input'\n\n"
 
 
+def test_ClickCliApp_display_counter_repository_info(capsys, monkeypatch):
+    # Arrange
+    mock_app_container: ApplicationContainer = Mock()
+    mock_app_container.counter_repository.repository_type.return_value = (
+        "some_repository_type"
+    )
+    mock_app_container.counter_repository.repository_location.return_value = (
+        "some_repository_location.db3"
+    )
+    click_cli_app = ClickCliApp(mock_app_container)
+
+    # Act
+    click_cli_app._display_counter_repository_info()
+
+    # Assert
+    captured = capsys.readouterr()
+    expected_output = """Counter repository type: some_repository_type
+Counter repository location: some_repository_location.db3
+"""
+    assert captured.out == expected_output
+    assert captured.err == ""
+
+
 """
 
     RUN LOOP AND PROMPTS
