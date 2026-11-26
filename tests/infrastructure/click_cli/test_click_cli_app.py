@@ -98,6 +98,7 @@ def test_ClickCliApp_display_counter_repository_info(capsys, monkeypatch):
     captured = capsys.readouterr()
     expected_output = """Counter repository type: some_repository_type
 Counter repository location: some_repository_location.db3
+
 """
     assert captured.out == expected_output
     assert captured.err == ""

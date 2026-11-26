@@ -47,6 +47,7 @@ class ClickCliApp:
         click.echo(
             "Counter repository location: "
             + self.app_container.counter_repository.repository_location()
+            + "\n"
         )
 
     """
