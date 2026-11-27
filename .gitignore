@@ -1,5 +1,6 @@
 .env
 .postgres_data/
+data.sqlite3
 
 # Python-generated files
 __pycache__/

@@ -4,7 +4,9 @@ import sqlalchemy.orm
 from counter_os.domain.entities.counter import Counter
 from counter_os.domain.repositories.counter_repository import CounterRepository
 from counter_os.domain.value_objects.count import Count
-from counter_os.infrastructure.persistence.repository_type import RepositoryType
+from counter_os.infrastructure.persistence.counter_repository_type import (
+    CounterRepositoryType,
+)
 
 
 class PostgresCounterRepository(CounterRepository):
@@ -47,7 +49,7 @@ class PostgresCounterRepository(CounterRepository):
             return Counter(Count(new_record.count))
 
     def repository_type(self) -> str:
-        return RepositoryType.POSTGRES_LOCAL
+        return CounterRepositoryType.POSTGRES_LOCAL
 
     def repository_location(self) -> str:
         return self._repository_location

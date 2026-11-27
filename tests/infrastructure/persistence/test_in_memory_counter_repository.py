@@ -3,7 +3,6 @@ from counter_os.domain.value_objects.count import Count
 from counter_os.infrastructure.persistence.in_memory_counter_repository import (
     InMemoryCounterRepository,
 )
-from counter_os.infrastructure.persistence.repository_type import RepositoryType
 
 
 def test_InMemoryCounterRepository_saves_to_and_gets_from_memory():

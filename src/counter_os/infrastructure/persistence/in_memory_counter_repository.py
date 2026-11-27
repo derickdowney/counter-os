@@ -4,7 +4,9 @@ from dataclasses import dataclass
 from counter_os.domain.entities.counter import Counter
 from counter_os.domain.repositories.counter_repository import CounterRepository
 from counter_os.domain.value_objects.count import Count
-from counter_os.infrastructure.persistence.repository_type import RepositoryType
+from counter_os.infrastructure.persistence.counter_repository_type import (
+    CounterRepositoryType,
+)
 
 
 @dataclass
@@ -19,7 +21,7 @@ class InMemoryCounterRepository(CounterRepository):
         return self._counter
 
     def repository_type(self) -> str:
-        return RepositoryType.MEMORY
+        return CounterRepositoryType.MEMORY
 
     def repository_location(self) -> str:
         return "RAM"

@@ -4,7 +4,9 @@ import pytest
 
 import counter_os.bootstrap.application_configuration
 from counter_os.bootstrap.application_configuration import ApplicationConfiguration
-from counter_os.infrastructure.persistence.repository_type import RepositoryType
+from counter_os.infrastructure.persistence.counter_repository_type import (
+    CounterRepositoryType,
+)
 
 
 @pytest.fixture
@@ -32,7 +34,7 @@ def test_ApplicationConfiguration_use_default_settings_when_no_env_file(
     settings: ApplicationConfiguration = ApplicationConfiguration.from_environment()
 
     # Assert
-    assert settings.counter_repository_type == RepositoryType.MEMORY
+    assert settings.counter_repository_type == CounterRepositoryType.MEMORY
     assert settings.counter_repository_location_sqlite_local == "data.sqlite3"
     assert settings.counter_repository_location_postgres_local == (
         "user:password@localhost:5432/counter_os"

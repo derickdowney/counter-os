@@ -3,7 +3,9 @@ from dataclasses import dataclass
 
 from dotenv import load_dotenv
 
-from counter_os.infrastructure.persistence.repository_type import RepositoryType
+from counter_os.infrastructure.persistence.counter_repository_type import (
+    CounterRepositoryType,
+)
 
 
 @dataclass(frozen=True)
@@ -19,7 +21,7 @@ class ApplicationConfiguration:
 
         return cls(
             counter_repository_type=os.getenv(
-                "COUNTER_REPOSITORY_TYPE", RepositoryType.MEMORY
+                "COUNTER_REPOSITORY_TYPE", CounterRepositoryType.MEMORY
             ),
             counter_repository_location_sqlite_local=os.getenv(
                 "COUNTER_REPOSITORY_LOCATION_SQLITE_LOCAL", "data.sqlite3"
