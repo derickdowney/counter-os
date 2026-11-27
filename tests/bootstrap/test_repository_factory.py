@@ -16,8 +16,9 @@ def test_create_repositories_invalid_config(capsys):
     # Arrange
     config = ApplicationConfiguration(
         counter_repository_type="not a repo type",
-        counter_repository_location_sqlite_local="na",
-        counter_repository_location_postgres_local="na",
+        counter_repository_location_sqlite_local="",
+        counter_repository_location_postgres_local="",
+        frontend_type="",
     )
 
     # Act
@@ -40,6 +41,7 @@ def test_create_repositories_memory_config():
         counter_repository_type="memory",
         counter_repository_location_sqlite_local="",
         counter_repository_location_postgres_local="",
+        frontend_type="",
     )
 
     # Act
@@ -58,6 +60,7 @@ def test_create_repositories_sqlite_local_config(tmp_path, monkeypatch):
         counter_repository_type="sqlite_local",
         counter_repository_location_sqlite_local="my_data.db",
         counter_repository_location_postgres_local="",
+        frontend_type="",
     )
 
     # Act
@@ -75,6 +78,7 @@ def test_create_repositories_postgres_local_config(monkeypatch):
         counter_repository_type="postgres_local",
         counter_repository_location_sqlite_local="",
         counter_repository_location_postgres_local="a:b@localhost:1234/c",
+        frontend_type="",
     )
     monkeypatch.setattr(
         PostgresCounterRepository,

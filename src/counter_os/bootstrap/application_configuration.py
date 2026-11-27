@@ -13,6 +13,7 @@ class ApplicationConfiguration:
     counter_repository_type: str
     counter_repository_location_sqlite_local: str
     counter_repository_location_postgres_local: str
+    frontend_type: str
 
     @classmethod
     def from_environment(cls) -> ApplicationConfiguration:
@@ -30,4 +31,5 @@ class ApplicationConfiguration:
                 "COUNTER_REPOSITORY_LOCATION_POSTGRES_LOCAL",
                 "user:password@localhost:5432/counter_os",
             ),
+            frontend_type=os.getenv("FRONTEND_TYPE", "cli"),
         )

@@ -20,6 +20,7 @@ def clean_counter_env(monkeypatch) -> None:
         "COUNTER_REPOSITORY_TYPE",
         "COUNTER_REPOSITORY_LOCATION_SQLITE_LOCAL",
         "COUNTER_REPOSITORY_LOCATION_POSTGRES_LOCAL",
+        "FRONTEND_TYPE",
     ):
         monkeypatch.delenv(var, raising=False)
 
@@ -39,6 +40,7 @@ def test_ApplicationConfiguration_use_default_settings_when_no_env_file(
     assert settings.counter_repository_location_postgres_local == (
         "user:password@localhost:5432/counter_os"
     )
+    assert settings.frontend_type == "cli"
 
 
 def test_ApplicationConfiguration_ensure_from_environment_pulls_actual_env_var(
@@ -52,6 +54,7 @@ def test_ApplicationConfiguration_ensure_from_environment_pulls_actual_env_var(
     monkeypatch.setenv(
         "COUNTER_REPOSITORY_LOCATION_POSTGRES_LOCAL", "postgres location"
     )
+    monkeypatch.setenv("FRONTEND_TYPE", "some frontend")
 
     # Act
     settings: ApplicationConfiguration = ApplicationConfiguration.from_environment()
@@ -60,6 +63,7 @@ def test_ApplicationConfiguration_ensure_from_environment_pulls_actual_env_var(
     assert settings.counter_repository_type == "test_repo_type"
     assert settings.counter_repository_location_sqlite_local == "sqlite location"
     assert settings.counter_repository_location_postgres_local == "postgres location"
+    assert settings.frontend_type == "some frontend"
 
 
 def test_ApplicationConfiguration_is_immutable():
