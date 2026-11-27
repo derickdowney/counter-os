@@ -10,7 +10,9 @@ def test_create_application_container_factory(tmp_path, monkeypatch):
         "counter_os.bootstrap.application_factory.create_repositories",
         lambda *args, **kwargs: (Mock(),),
     )
-    app: ApplicationContainer = create_application_container(
-        config=Mock(), counter_presenter=Mock()
+    monkeypatch.setattr(
+        "counter_os.bootstrap.application_factory.create_presenters",
+        lambda *args, **kwargs: (Mock(),),
     )
+    app: ApplicationContainer = create_application_container(config=Mock())
     assert isinstance(app, ApplicationContainer)
