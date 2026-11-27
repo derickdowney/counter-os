@@ -1,10 +1,6 @@
-from unittest.mock import Mock
-
+from counter_os.bootstrap.application_configuration import ApplicationConfiguration
 from counter_os.bootstrap.repository_factory import create_repositories
 from counter_os.domain.repositories.counter_repository import CounterRepository
-from counter_os.infrastructure.persistence.counter_repository_type import (
-    CounterRepositoryType,
-)
 from counter_os.infrastructure.persistence.in_memory_counter_repository import (
     InMemoryCounterRepository,
 )
@@ -16,45 +12,79 @@ from counter_os.infrastructure.persistence.sqlite_counter_repository import (
 )
 
 
-def test_create_repositories_from_environment_variables(monkeypatch):
-    monkeypatch.setenv("COUNTER_REPOSITORY_TYPE", CounterRepositoryType.MEMORY)
-    repositories: tuple[CounterRepository] = create_repositories()
+def test_create_repositories_invalid_config(capsys):
+    # Arrange
+    config = ApplicationConfiguration(
+        counter_repository_type="not a repo type",
+        counter_repository_location_sqlite_local="na",
+        counter_repository_location_postgres_local="na",
+    )
+
+    # Act
+    repositories: tuple[CounterRepository] = create_repositories(config)
+
+    # Assert
+    output = capsys.readouterr()
+    assert output.out == ""
+    assert (
+        output.err
+        == "Invalid CounterRepositoryType: 'not a repo type'\nDefaulting to InMemoryCounterRepository\n"
+    )
+    assert len(repositories) == 1
     assert isinstance(repositories[0], InMemoryCounterRepository)
 
 
-def test_create_repositories_creates_memory_repo_when_no_valid_env_var(monkeypatch):
-    monkeypatch.setenv("COUNTER_REPOSITORY_TYPE", "not_a_valid_type")
-    repositories: tuple[CounterRepository] = create_repositories()
+def test_create_repositories_memory_config():
+    # Arrange
+    config = ApplicationConfiguration(
+        counter_repository_type="memory",
+        counter_repository_location_sqlite_local="",
+        counter_repository_location_postgres_local="",
+    )
+
+    # Act
+    repositories: tuple[CounterRepository] = create_repositories(config)
+
+    # Assert
+    assert len(repositories) == 1
     assert isinstance(repositories[0], InMemoryCounterRepository)
 
 
-def test_create_repositories_creates_sqlite_repo_from_env_var(monkeypatch, tmp_path):
-    monkeypatch.setenv("COUNTER_REPOSITORY_TYPE", CounterRepositoryType.SQLITE_LOCAL)
-    monkeypatch.setenv("COUNTER_REPOSITORY_LOCATION_SQLITE_LOCAL", "test.db3")
+def test_create_repositories_sqlite_local_config(tmp_path, monkeypatch):
+    # Arrange
     monkeypatch.chdir(tmp_path)
-    repositories: tuple[CounterRepository] = create_repositories()
+    expected_db = tmp_path / "my_data.db"
+    config = ApplicationConfiguration(
+        counter_repository_type="sqlite_local",
+        counter_repository_location_sqlite_local="my_data.db",
+        counter_repository_location_postgres_local="",
+    )
+
+    # Act
+    repositories: tuple[CounterRepository] = create_repositories(config)
+
+    # Assert
+    assert len(repositories) == 1
     assert isinstance(repositories[0], SqliteCounterRepository)
+    assert expected_db.is_file()
 
 
-def test_create_repositories_creates_postgres_repo_from_env_var(monkeypatch, tmp_path):
-    monkeypatch.setenv("COUNTER_REPOSITORY_TYPE", CounterRepositoryType.POSTGRES_LOCAL)
-    monkeypatch.setenv(
-        "COUNTER_REPOSITORY_LOCATION_POSTGRES_LOCAL",
-        "some:test@localhost:5432/counter_os",
+def test_create_repositories_postgres_local_config(monkeypatch):
+    # Arrange
+    config = ApplicationConfiguration(
+        counter_repository_type="postgres_local",
+        counter_repository_location_sqlite_local="",
+        counter_repository_location_postgres_local="a:b@localhost:1234/c",
     )
-
-    configured_locations: list[str] = []
-
-    def fake_configure(self, location: str) -> None:
-        configured_locations.append(location)
-        self._session_factory = Mock()
-
     monkeypatch.setattr(
-        PostgresCounterRepository, "_configure_sql_alchemy", fake_configure
+        PostgresCounterRepository,
+        "_configure_sql_alchemy",
+        lambda *args, **kwargs: False,
     )
 
-    monkeypatch.chdir(tmp_path)
-    repositories: tuple[CounterRepository] = create_repositories()
+    # Act
+    repositories: tuple[CounterRepository] = create_repositories(config)
+
+    # Assert
     assert len(repositories) == 1
     assert isinstance(repositories[0], PostgresCounterRepository)
-    assert configured_locations == ["some:test@localhost:5432/counter_os"]

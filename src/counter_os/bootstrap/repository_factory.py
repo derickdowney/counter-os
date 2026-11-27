@@ -1,3 +1,5 @@
+import sys
+
 from counter_os.bootstrap.application_configuration import ApplicationConfiguration
 from counter_os.domain.repositories.counter_repository import CounterRepository
 from counter_os.infrastructure.persistence.counter_repository_type import (
@@ -14,22 +16,26 @@ from counter_os.infrastructure.persistence.sqlite_counter_repository import (
 )
 
 
-def create_repositories() -> tuple[CounterRepository]:
-    settings = ApplicationConfiguration.from_environment()
-    match settings.counter_repository_type:
+def create_repositories(config: ApplicationConfiguration) -> tuple[CounterRepository]:
+    match config.counter_repository_type:
         case CounterRepositoryType.MEMORY:
             return (InMemoryCounterRepository(),)
         case CounterRepositoryType.SQLITE_LOCAL:
             return (
                 SqliteCounterRepository(
-                    settings.counter_repository_location_sqlite_local
+                    config.counter_repository_location_sqlite_local
                 ),
             )
         case CounterRepositoryType.POSTGRES_LOCAL:
             return (
                 PostgresCounterRepository(
-                    settings.counter_repository_location_postgres_local
+                    config.counter_repository_location_postgres_local
                 ),
             )
         case _:
+            print(
+                f"Invalid CounterRepositoryType: '{config.counter_repository_type}'",
+                file=sys.stderr,
+            )
+            print("Defaulting to InMemoryCounterRepository", file=sys.stderr)
             return (InMemoryCounterRepository(),)
