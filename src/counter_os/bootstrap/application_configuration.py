@@ -16,14 +16,31 @@ class ApplicationConfiguration:
     frontend_type: str
 
     @classmethod
-    def from_environment(cls) -> ApplicationConfiguration:
+    def from_environment(
+        cls,
+        *,
+        frontend_override: str | None = None,
+        counter_repository_type_override: str | None = None,
+    ) -> ApplicationConfiguration:
         # Automatically load your .env file
         load_dotenv()
 
-        return cls(
-            counter_repository_type=os.getenv(
+        counter_repository_type: str
+        if counter_repository_type_override is not None:
+            counter_repository_type = counter_repository_type_override
+        else:
+            counter_repository_type = os.getenv(
                 "COUNTER_REPOSITORY_TYPE", CounterRepositoryType.MEMORY
-            ),
+            )
+
+        frontend: str
+        if frontend_override is not None:
+            frontend = frontend_override
+        else:
+            frontend = os.getenv("FRONTEND_TYPE", "cli")
+
+        return cls(
+            counter_repository_type=counter_repository_type,
             counter_repository_location_sqlite_local=os.getenv(
                 "COUNTER_REPOSITORY_LOCATION_SQLITE_LOCAL", "data.sqlite3"
             ),
@@ -31,5 +48,5 @@ class ApplicationConfiguration:
                 "COUNTER_REPOSITORY_LOCATION_POSTGRES_LOCAL",
                 "user:password@localhost:5432/counter_os",
             ),
-            frontend_type=os.getenv("FRONTEND_TYPE", "cli"),
+            frontend_type=frontend,
         )

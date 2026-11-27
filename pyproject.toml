@@ -21,7 +21,7 @@ dependencies = [
 ]
 
 [project.scripts]
-counter-os = "counter_os.main:main"
+counter-os = "counter_os.bootstrap.entrypoints:main"
 
 [build-system]
 requires = ["uv_build>=0.13.6,<0.14.0"]
