@@ -1,3 +1,26 @@
+# Quick Start
+
+## Neovim Development Environment
+To setup the Neovim dev workspace for this:
+- In your terminal, navigate to this project directory
+- Run `source .venv/bin/activate`
+- Run `nvim -S session.vim`
+- Navigate to bottom-left terminal and run `source .venv/bin/activate`
+
+## Running Tests
+In neovim:
+- Press `0-` to run unit tests
+- Press `0=` to run unit and integration tests
+
+## Running Application
+- Create ".env" file at project root (refer to ".env-template")
+- If using "postgres_local", run this command in terminal first:
+    - `docker-compose up -d`
+
+
+
+
+
 # Clean Architecture Overview
 
 ## Domain Layer

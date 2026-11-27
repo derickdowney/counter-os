@@ -1,0 +1,13 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: counter-os-postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: counter_os
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./.postgres_data:/var/lib/postgresql
+    restart: unless-stopped

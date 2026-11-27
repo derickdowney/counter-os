@@ -7,29 +7,57 @@ from counter_os.bootstrap.application_configuration import ApplicationConfigurat
 from counter_os.infrastructure.persistence.repository_type import RepositoryType
 
 
-def test_ApplicationConfiguration_use_default_settings_when_no_env_file(monkeypatch):
-    monkeypatch.delenv("COUNTER_REPOSITORY_TYPE", raising=False)
-    monkeypatch.delenv("COUNTER_REPOSITORY_LOCATION", raising=False)
+@pytest.fixture
+def clean_counter_env(monkeypatch) -> None:
     monkeypatch.setattr(
         counter_os.bootstrap.application_configuration,
         "load_dotenv",
-        lambda *args, **kwargs: False,
+        lambda: None,
     )
+    for var in (
+        "COUNTER_REPOSITORY_TYPE",
+        "COUNTER_REPOSITORY_LOCATION_SQLITE_LOCAL",
+        "COUNTER_REPOSITORY_LOCATION_POSTGRES_LOCAL",
+    ):
+        monkeypatch.delenv(var, raising=False)
+
+
+def test_ApplicationConfiguration_use_default_settings_when_no_env_file(
+    clean_counter_env,
+):
+    # Arrange
+    clean_counter_env
+
+    # Act
     settings: ApplicationConfiguration = ApplicationConfiguration.from_environment()
+
+    # Assert
     assert settings.counter_repository_type == RepositoryType.MEMORY
-    assert settings.counter_repository_location == "data.sqlite3"
+    assert settings.counter_repository_location_sqlite_local == "data.sqlite3"
+    assert settings.counter_repository_location_postgres_local == (
+        "user:password@localhost:5432/counter_os"
+    )
 
 
 def test_ApplicationConfiguration_ensure_from_environment_pulls_actual_env_var(
+    clean_counter_env,
     monkeypatch,
 ):
+    # Arrange
+    clean_counter_env
     monkeypatch.setenv("COUNTER_REPOSITORY_TYPE", "test_repo_type")
-    monkeypatch.setenv("COUNTER_REPOSITORY_LOCATION", "some_test.db3")
+    monkeypatch.setenv("COUNTER_REPOSITORY_LOCATION_SQLITE_LOCAL", "sqlite location")
+    monkeypatch.setenv(
+        "COUNTER_REPOSITORY_LOCATION_POSTGRES_LOCAL", "postgres location"
+    )
 
+    # Act
     settings: ApplicationConfiguration = ApplicationConfiguration.from_environment()
 
+    # Assert
     assert settings.counter_repository_type == "test_repo_type"
-    assert settings.counter_repository_location == "some_test.db3"
+    assert settings.counter_repository_location_sqlite_local == "sqlite location"
+    assert settings.counter_repository_location_postgres_local == "postgres location"
 
 
 def test_ApplicationConfiguration_is_immutable():
