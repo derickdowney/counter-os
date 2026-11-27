@@ -23,6 +23,7 @@ def test_create_repositories_creates_memory_repo_when_no_valid_env_var(monkeypat
 
 def test_create_repositories_creates_sqlite_repo_from_env_var(monkeypatch, tmp_path):
     monkeypatch.setenv("COUNTER_REPOSITORY_TYPE", RepositoryType.SQLITE_LOCAL)
+    monkeypatch.setenv("COUNTER_REPOSITORY_LOCATION", "test.db3")
     monkeypatch.chdir(tmp_path)
     repositories: tuple[CounterRepository] = create_repositories()
     assert isinstance(repositories[0], SqliteCounterRepository)
