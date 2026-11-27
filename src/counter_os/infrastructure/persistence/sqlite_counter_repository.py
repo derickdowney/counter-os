@@ -69,9 +69,6 @@ def validate_relative_file_path_arg(relative_file_path: str):
     if " " in relative_file_path:
         raise ValueError("`relative_file_path` arg cannot contain spaces")
 
-    if not relative_file_path.endswith((".db", ".db3")):
-        raise ValueError("`relative_file_path` arg must end with `.db` or `.db3`")
-
     if relative_file_path.startswith("/"):
         raise ValueError("`relative_file_path` arg cannot begin with `/`")
 

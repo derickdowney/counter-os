@@ -60,18 +60,6 @@ def test_SqliteCounterRepository_relative_file_path_cannot_contain_spaces():
         SqliteCounterRepository("test file.db3")
 
 
-def test_SqliteCounterRepository_relative_file_path_must_end_with_db3_or_db(
-    tmp_path, monkeypatch
-):
-    monkeypatch.chdir(tmp_path)
-    SqliteCounterRepository("test.db")
-    SqliteCounterRepository("test.db3")
-    with pytest.raises(ValueError):
-        SqliteCounterRepository("test")
-    with pytest.raises(ValueError):
-        SqliteCounterRepository("test.d")
-
-
 def test_SqliteCounterRepository_creates_session_factory(sqlite_counter_repo):
     repo = sqlite_counter_repo
     assert isinstance(repo._session_factory, sa.orm.sessionmaker)
