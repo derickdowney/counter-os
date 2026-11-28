@@ -2,6 +2,7 @@ from flask import Flask
 
 from counter_os.bootstrap.application_configuration import ApplicationConfiguration
 from counter_os.bootstrap.application_container import ApplicationContainer
+from counter_os.bootstrap.application_environment_type import ApplicationEnvironmentType
 from counter_os.infrastructure.flask_web.flask_app_factory import create_flask_app
 
 
@@ -14,3 +15,10 @@ class FlaskWebApp:
     ):
         self.app_config = app_config
         self.flask_app = create_flask_app(app_container)
+
+    def run(self):
+        match self.app_config.app_env:
+            case ApplicationEnvironmentType.DEVELOPMENT:
+                self.flask_app.run(debug=True)
+            case _:
+                print("error")
