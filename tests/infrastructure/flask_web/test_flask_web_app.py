@@ -54,3 +54,22 @@ def test_FlaskWebApp_run_when_app_env_development(monkeypatch):
 
     # Assert
     mock_flask_app.run.assert_called_once_with(debug=True)
+
+
+def test_FlaskWebApp_run_when_app_env_production(monkeypatch):
+    # Arrange
+    mock_app_config = Mock()
+    mock_app_config.app_env = ApplicationEnvironmentType.PRODUCTION
+    mock_app_container = Mock()
+    flask_web_app = FlaskWebApp(mock_app_config, mock_app_container)
+    mock_gunicorn_run = Mock()
+    monkeypatch.setattr(
+        "counter_os.infrastructure.flask_web.flask_web_app.gunicorn_run",
+        mock_gunicorn_run,
+    )
+
+    # Act
+    flask_web_app.run()
+
+    # Assert
+    mock_gunicorn_run.assert_called_once_with(mock_app_config)

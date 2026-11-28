@@ -20,5 +20,11 @@ class FlaskWebApp:
         match self.app_config.app_env:
             case ApplicationEnvironmentType.DEVELOPMENT:
                 self.flask_app.run(debug=True)
+            case ApplicationEnvironmentType.PRODUCTION:
+                gunicorn_run(self.app_config)
             case _:
                 print("error")
+
+
+def gunicorn_run(app_config: ApplicationConfiguration):
+    pass
