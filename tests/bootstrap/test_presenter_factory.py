@@ -1,5 +1,6 @@
 from counter_os.bootstrap.application_configuration import ApplicationConfiguration
 from counter_os.bootstrap.presenter_factory import create_presenters
+from counter_os.infrastructure.frontend_type import FrontendType
 from counter_os.interfaces.presenters.click_counter_presenter import (
     ClickCounterPresenter,
 )
@@ -35,7 +36,7 @@ def test_create_presenters_frontend_config():
         counter_repository_type="",
         counter_repository_location_sqlite_local="",
         counter_repository_location_postgres_local="",
-        frontend_type="cli",
+        frontend_type=FrontendType.CLI,
     )
 
     # Act

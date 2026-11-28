@@ -4,6 +4,7 @@ import pytest
 
 import counter_os.bootstrap.application_configuration
 from counter_os.bootstrap.application_configuration import ApplicationConfiguration
+from counter_os.infrastructure.frontend_type import FrontendType
 from counter_os.infrastructure.persistence.counter_repository_type import (
     CounterRepositoryType,
 )
@@ -40,7 +41,7 @@ def test_ApplicationConfiguration_use_default_settings_when_no_env_file(
     assert settings.counter_repository_location_postgres_local == (
         "user:password@localhost:5432/counter_os"
     )
-    assert settings.frontend_type == "cli"
+    assert settings.frontend_type == FrontendType.CLI
 
 
 def test_ApplicationConfiguration_ensure_from_environment_pulls_actual_env_var(

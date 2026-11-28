@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 from dotenv import load_dotenv
 
+from counter_os.infrastructure.frontend_type import FrontendType
 from counter_os.infrastructure.persistence.counter_repository_type import (
     CounterRepositoryType,
 )
@@ -37,7 +38,7 @@ class ApplicationConfiguration:
         if frontend_override is not None:
             frontend = frontend_override
         else:
-            frontend = os.getenv("FRONTEND_TYPE", "cli")
+            frontend = os.getenv("FRONTEND_TYPE", FrontendType.CLI)
 
         return cls(
             counter_repository_type=counter_repository_type,
