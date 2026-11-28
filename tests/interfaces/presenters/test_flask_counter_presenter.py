@@ -1,4 +1,5 @@
 from counter_os.application.dtos.counter_response import CounterResponse
+from counter_os.application.dtos.error_response import ErrorCode, ErrorResponse
 from counter_os.domain.entities.counter import Counter
 from counter_os.domain.value_objects.count import Count
 from counter_os.interfaces.presenters.counter_presenter import CounterPresenter
@@ -17,3 +18,11 @@ def test_FlaskCounterPresenter_present_counter_response():
         CounterResponse.from_entity(Counter(Count(79)))
     )
     assert counter_vm.current_count == 79
+
+
+def test_FlaskCounterPresenter_present_error_response():
+    error_vm = FlaskCounterPresenter().present_error_response(
+        ErrorResponse.count_cannot_be_negative(-100)
+    )
+    assert error_vm.message == "-100 is a negative value and count cannot be negative"
+    assert error_vm.code == ErrorCode.COUNT_CANNOT_BE_NEGATIVE
