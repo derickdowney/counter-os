@@ -17,6 +17,7 @@ def test_create_presenters_invalid_config(capsys):
         counter_repository_location_sqlite_local="",
         counter_repository_location_postgres_local="",
         frontend_type="not a valid frontend",
+        app_env="",
     )
 
     # Act
@@ -40,6 +41,7 @@ def test_create_presenters_CLI_config():
         counter_repository_location_sqlite_local="",
         counter_repository_location_postgres_local="",
         frontend_type=FrontendType.CLI,
+        app_env="",
     )
 
     # Act
@@ -57,6 +59,7 @@ def test_create_presenters_FLASK_config():
         counter_repository_location_sqlite_local="",
         counter_repository_location_postgres_local="",
         frontend_type=FrontendType.FLASK,
+        app_env="",
     )
 
     # Act

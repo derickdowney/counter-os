@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 from dotenv import load_dotenv
 
+from counter_os.bootstrap.application_environment_type import ApplicationEnvironmentType
 from counter_os.infrastructure.frontend_type import FrontendType
 from counter_os.infrastructure.persistence.counter_repository_type import (
     CounterRepositoryType,
@@ -15,6 +16,7 @@ class ApplicationConfiguration:
     counter_repository_location_sqlite_local: str
     counter_repository_location_postgres_local: str
     frontend_type: str
+    app_env: str
 
     @classmethod
     def from_environment(
@@ -50,4 +52,5 @@ class ApplicationConfiguration:
                 "user:password@localhost:5432/counter_os",
             ),
             frontend_type=frontend,
+            app_env=os.getenv("APP_ENV", ApplicationEnvironmentType.DEVELOPMENT),
         )
