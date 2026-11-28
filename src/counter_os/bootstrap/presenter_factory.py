@@ -6,12 +6,17 @@ from counter_os.interfaces.presenters.click_counter_presenter import (
     ClickCounterPresenter,
 )
 from counter_os.interfaces.presenters.counter_presenter import CounterPresenter
+from counter_os.interfaces.presenters.flask_counter_presenter import (
+    FlaskCounterPresenter,
+)
 
 
 def create_presenters(config: ApplicationConfiguration) -> tuple[CounterPresenter]:
     match config.frontend_type:
         case FrontendType.CLI:
             return (ClickCounterPresenter(),)
+        case FrontendType.FLASK:
+            return (FlaskCounterPresenter(),)
         case _:
             print(
                 f"Invalid FRONTEND_TYPE: '{config.frontend_type}'",

@@ -5,6 +5,9 @@ from counter_os.interfaces.presenters.click_counter_presenter import (
     ClickCounterPresenter,
 )
 from counter_os.interfaces.presenters.counter_presenter import CounterPresenter
+from counter_os.interfaces.presenters.flask_counter_presenter import (
+    FlaskCounterPresenter,
+)
 
 
 def test_create_presenters_invalid_config(capsys):
@@ -30,7 +33,7 @@ def test_create_presenters_invalid_config(capsys):
     assert isinstance(presenters[0], ClickCounterPresenter)
 
 
-def test_create_presenters_frontend_config():
+def test_create_presenters_CLI_config():
     # Arrange
     config = ApplicationConfiguration(
         counter_repository_type="",
@@ -45,3 +48,20 @@ def test_create_presenters_frontend_config():
     # Assert
     assert len(presenters) == 1
     assert isinstance(presenters[0], ClickCounterPresenter)
+
+
+def test_create_presenters_FLASK_config():
+    # Arrange
+    config = ApplicationConfiguration(
+        counter_repository_type="",
+        counter_repository_location_sqlite_local="",
+        counter_repository_location_postgres_local="",
+        frontend_type=FrontendType.FLASK,
+    )
+
+    # Act
+    presenters: tuple[CounterPresenter] = create_presenters(config)
+
+    # Assert
+    assert len(presenters) == 1
+    assert isinstance(presenters[0], FlaskCounterPresenter)
