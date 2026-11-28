@@ -1,4 +1,5 @@
 from flask import Flask
+from gunicorn.app.base import BaseApplication as gunicorn_base
 
 from counter_os.bootstrap.application_configuration import ApplicationConfiguration
 from counter_os.bootstrap.application_container import ApplicationContainer
@@ -25,10 +26,30 @@ class FlaskWebApp:
                     debug=True,
                 )
             case ApplicationEnvironmentType.PRODUCTION:
-                gunicorn_run(self.app_config)
+                gunicorn_run(self.app_config, self.flask_app)
             case _:
                 print("error")
 
 
-def gunicorn_run(app_config: ApplicationConfiguration):
-    pass
+def gunicorn_run(app_config: ApplicationConfiguration, flask_app: Flask):
+    options: dict[str, object] = {
+        "bind": f"{app_config.flask_host}:{app_config.flask_port}",
+        "workers": 2,
+    }
+    StandaloneGunicornApplication(flask_app, options).run()
+
+
+class StandaloneGunicornApplication(gunicorn_base):
+    def __init__(self, app: Flask, options: dict[str, object]):
+        self.application = app
+        self.options = options
+        super().__init__()
+
+    def load_config(self) -> None:
+        assert self.cfg is not None
+        for key, value in self.options.items():
+            if key in self.cfg.settings and value is not None:
+                self.cfg.set(key.lower(), value)
+
+    def load(self) -> Flask:
+        return self.application

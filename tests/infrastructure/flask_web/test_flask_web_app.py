@@ -3,8 +3,13 @@ from unittest.mock import Mock
 import pytest
 from flask import Flask
 
+from counter_os.bootstrap.application_configuration import ApplicationConfiguration
 from counter_os.bootstrap.application_environment_type import ApplicationEnvironmentType
-from counter_os.infrastructure.flask_web.flask_web_app import FlaskWebApp
+from counter_os.infrastructure.flask_web.flask_web_app import (
+    FlaskWebApp,
+    StandaloneGunicornApplication,
+    gunicorn_run,
+)
 
 
 def test_FlaskWebApp_cannot_init_without_args():
@@ -74,4 +79,27 @@ def test_FlaskWebApp_run_when_app_env_production(monkeypatch):
     flask_web_app.run()
 
     # Assert
-    mock_gunicorn_run.assert_called_once_with(mock_app_config)
+    mock_gunicorn_run.assert_called_once_with(mock_app_config, flask_web_app.flask_app)
+
+
+def test_gunicorn_run(monkeypatch):
+    # Arrange
+    mock_app_config: ApplicationConfiguration = Mock()
+    mock_app_config.flask_host = "5.6.7.8"
+    mock_app_config.flask_port = 111
+    mock_flask_app: Flask = Mock()
+    mock_gunicorn_app_instance: StandaloneGunicornApplication = Mock()
+    mock_standalone_gunicorn_app = Mock(return_value=mock_gunicorn_app_instance)
+    monkeypatch.setattr(
+        "counter_os.infrastructure.flask_web.flask_web_app.StandaloneGunicornApplication",
+        mock_standalone_gunicorn_app,
+    )
+
+    # Act
+    gunicorn_run(mock_app_config, mock_flask_app)
+
+    # Assert
+    mock_standalone_gunicorn_app.assert_called_once_with(
+        mock_flask_app, {"bind": "5.6.7.8:111", "workers": 2}
+    )
+    mock_gunicorn_app_instance.run.assert_called_once_with()
