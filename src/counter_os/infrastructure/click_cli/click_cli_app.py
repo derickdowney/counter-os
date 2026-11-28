@@ -1,5 +1,3 @@
-import os
-
 import click
 
 from counter_os.bootstrap.application_container import ApplicationContainer
