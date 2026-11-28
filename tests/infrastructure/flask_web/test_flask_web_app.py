@@ -21,7 +21,7 @@ def test_FlaskWebApp_init_requires_config_and_container():
 
     # Assert
     assert flask_web_app.app_config == mock_app_config
-    assert flask_web_app.app_container == mock_app_container
+    assert flask_web_app.flask_app.config["APP_CONTAINER"] == mock_app_container
 
 
 def test_FlaskWebApp_init_creates_flask_app():

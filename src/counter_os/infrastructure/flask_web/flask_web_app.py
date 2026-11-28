@@ -7,12 +7,10 @@ from counter_os.infrastructure.flask_web.flask_app_factory import create_flask_a
 
 class FlaskWebApp:
     app_config: ApplicationConfiguration
-    app_container: ApplicationContainer
     flask_app: Flask
 
     def __init__(
         self, app_config: ApplicationConfiguration, app_container: ApplicationContainer
     ):
         self.app_config = app_config
-        self.app_container = app_container
         self.flask_app = create_flask_app(app_container)
