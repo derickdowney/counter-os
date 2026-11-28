@@ -6,9 +6,9 @@ from counter_os.interfaces.view_models.counter_view_model import CounterViewMode
 
 class FlaskCounterPresenter(CounterPresenter):
     def present_counter_response(
-        self, counter_reponse: CounterResponse
+        self, counter_response: CounterResponse
     ) -> CounterViewModel:
-        pass
+        return CounterViewModel(counter_response.current_count)
 
-    def present_error_response(self, error_reponse: ErrorResponse) -> ErrorViewModel:
+    def present_error_response(self, error_response: ErrorResponse) -> ErrorViewModel:
         pass
