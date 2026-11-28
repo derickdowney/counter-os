@@ -1,8 +1,8 @@
 from unittest.mock import Mock
 
-from counter_os.infrastructure.flask_web.flask_web_app_factory import create_flask_app
 from flask import Flask
 
+from counter_os.infrastructure.flask_web.flask_app_factory import create_flask_app
 from counter_os.infrastructure.flask_web.flask_routes import bp
 
 
