@@ -1,3 +1,5 @@
+import sys
+
 from flask import Flask
 from gunicorn.app.base import BaseApplication as gunicorn_base
 
@@ -30,8 +32,20 @@ class FlaskWebApp:
                 gunicorn_run(self.app_config, self.flask_app)
                 return 0
             case _:
-                print("error")
-                return 1
+                print(
+                    f'"{self.app_config.app_env}" is not a valid APP_ENV',
+                    file=sys.stderr,
+                )
+                print(
+                    'Starting app with "development" application environment type',
+                    file=sys.stderr,
+                )
+                self.flask_app.run(
+                    host=self.app_config.flask_host,
+                    port=self.app_config.flask_port,
+                    debug=True,
+                )
+                return 0
 
 
 def gunicorn_run(app_config: ApplicationConfiguration, flask_app: Flask):

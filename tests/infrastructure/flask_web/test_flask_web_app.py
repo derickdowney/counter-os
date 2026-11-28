@@ -42,6 +42,36 @@ def test_FlaskWebApp_init_creates_flask_app():
     assert isinstance(flask_web_app.flask_app, Flask)
 
 
+def test_FlaskWebApp_run_when_app_env_invalid(monkeypatch, capsys):
+    # Arrange
+    mock_app_config = Mock()
+    mock_app_config.app_env = "test"
+    mock_app_config.flask_host = "10.20.30.40"
+    mock_app_config.flask_port = 43210
+    mock_app_container = Mock()
+    mock_flask_app = Mock()
+    monkeypatch.setattr(
+        "counter_os.infrastructure.flask_web.flask_web_app.create_flask_app",
+        lambda *args, **kwargs: mock_flask_app,
+    )
+    flask_web_app = FlaskWebApp(mock_app_config, mock_app_container)
+
+    # Act
+    exitcode: int = flask_web_app.run()
+
+    # Assert
+    output = capsys.readouterr()
+    assert output.out == ""
+    assert (
+        output.err
+        == '"test" is not a valid APP_ENV\nStarting app with "development" application environment type\n'
+    )
+    mock_flask_app.run.assert_called_once_with(
+        debug=True, host="10.20.30.40", port=43210
+    )
+    assert exitcode == 0
+
+
 def test_FlaskWebApp_run_when_app_env_development(monkeypatch):
     # Arrange
     mock_app_config = Mock()
@@ -57,10 +87,11 @@ def test_FlaskWebApp_run_when_app_env_development(monkeypatch):
     flask_web_app = FlaskWebApp(mock_app_config, mock_app_container)
 
     # Act
-    flask_web_app.run()
+    exitcode: int = flask_web_app.run()
 
     # Assert
     mock_flask_app.run.assert_called_once_with(debug=True, host="1.2.3.4", port=4321)
+    assert exitcode == 0
 
 
 def test_FlaskWebApp_run_when_app_env_production(monkeypatch):
@@ -76,10 +107,11 @@ def test_FlaskWebApp_run_when_app_env_production(monkeypatch):
     )
 
     # Act
-    flask_web_app.run()
+    exitcode: int = flask_web_app.run()
 
     # Assert
     mock_gunicorn_run.assert_called_once_with(mock_app_config, flask_web_app.flask_app)
+    assert exitcode == 0
 
 
 def test_gunicorn_run(monkeypatch):
