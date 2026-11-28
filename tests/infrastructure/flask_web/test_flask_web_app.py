@@ -41,6 +41,8 @@ def test_FlaskWebApp_run_when_app_env_development(monkeypatch):
     # Arrange
     mock_app_config = Mock()
     mock_app_config.app_env = ApplicationEnvironmentType.DEVELOPMENT
+    mock_app_config.flask_host = "1.2.3.4"
+    mock_app_config.flask_port = 4321
     mock_app_container = Mock()
     mock_flask_app = Mock()
     monkeypatch.setattr(
@@ -53,7 +55,7 @@ def test_FlaskWebApp_run_when_app_env_development(monkeypatch):
     flask_web_app.run()
 
     # Assert
-    mock_flask_app.run.assert_called_once_with(debug=True)
+    mock_flask_app.run.assert_called_once_with(debug=True, host="1.2.3.4", port=4321)
 
 
 def test_FlaskWebApp_run_when_app_env_production(monkeypatch):

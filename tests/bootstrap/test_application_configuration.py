@@ -48,7 +48,7 @@ def test_ApplicationConfiguration_use_default_settings_when_no_env_file(
     assert settings.frontend_type == FrontendType.CLI
     assert settings.app_env == ApplicationEnvironmentType.DEVELOPMENT
     assert settings.flask_host == "127.0.0.1"
-    assert settings.flask_port == "5001"
+    assert settings.flask_port == 5001
 
 
 def test_ApplicationConfiguration_ensure_from_environment_pulls_actual_env_var(
@@ -65,7 +65,7 @@ def test_ApplicationConfiguration_ensure_from_environment_pulls_actual_env_var(
     monkeypatch.setenv("FRONTEND_TYPE", "some frontend")
     monkeypatch.setenv("APP_ENV", "some environment")
     monkeypatch.setenv("FLASK_HOST", "some host")
-    monkeypatch.setenv("FLASK_PORT", "some port")
+    monkeypatch.setenv("FLASK_PORT", "9999")
 
     # Act
     settings: ApplicationConfiguration = ApplicationConfiguration.from_environment()
@@ -77,7 +77,7 @@ def test_ApplicationConfiguration_ensure_from_environment_pulls_actual_env_var(
     assert settings.frontend_type == "some frontend"
     assert settings.app_env == "some environment"
     assert settings.flask_host == "some host"
-    assert settings.flask_port == "some port"
+    assert settings.flask_port == 9999
 
 
 def test_ApplicationConfiguration_is_immutable():

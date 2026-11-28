@@ -19,7 +19,11 @@ class FlaskWebApp:
     def run(self):
         match self.app_config.app_env:
             case ApplicationEnvironmentType.DEVELOPMENT:
-                self.flask_app.run(debug=True)
+                self.flask_app.run(
+                    host=self.app_config.flask_host,
+                    port=self.app_config.flask_port,
+                    debug=True,
+                )
             case ApplicationEnvironmentType.PRODUCTION:
                 gunicorn_run(self.app_config)
             case _:
