@@ -6,8 +6,12 @@ from counter_os.bootstrap.application_container_factory import (
     create_application_container,
 )
 from counter_os.infrastructure.click_cli.click_cli_app import ClickCliApp
+from counter_os.infrastructure.flask_web.flask_web_app import FlaskWebApp
 from counter_os.interfaces.presenters.click_counter_presenter import (
     ClickCounterPresenter,
+)
+from counter_os.interfaces.presenters.flask_counter_presenter import (
+    FlaskCounterPresenter,
 )
 
 
@@ -18,15 +22,18 @@ def main():
         parser.add_argument("-r", required=False, help="Counter Repository Type")
         args = parser.parse_args()
 
-        config = ApplicationConfiguration.from_environment(
+        app_config = ApplicationConfiguration.from_environment(
             counter_repository_type_override=args.r,
             frontend_override=args.f,
         )
-        app_container = create_application_container(config)
+        app_container = create_application_container(app_config)
 
         if isinstance(app_container.counter_presenter, ClickCounterPresenter):
             click_cli_app = ClickCliApp(app_container)
             return click_cli_app.run()
+        if isinstance(app_container.counter_presenter, FlaskCounterPresenter):
+            flask_web_app = FlaskWebApp(app_config, app_container)
+            return flask_web_app.run()
     except KeyboardInterrupt:
         print("\nGoodbye!")
         return 0

@@ -17,7 +17,7 @@ class FlaskWebApp:
         self.app_config = app_config
         self.flask_app = create_flask_app(app_container)
 
-    def run(self):
+    def run(self) -> int:
         match self.app_config.app_env:
             case ApplicationEnvironmentType.DEVELOPMENT:
                 self.flask_app.run(
@@ -25,10 +25,13 @@ class FlaskWebApp:
                     port=self.app_config.flask_port,
                     debug=True,
                 )
+                return 0
             case ApplicationEnvironmentType.PRODUCTION:
                 gunicorn_run(self.app_config, self.flask_app)
+                return 0
             case _:
                 print("error")
+                return 1
 
 
 def gunicorn_run(app_config: ApplicationConfiguration, flask_app: Flask):
