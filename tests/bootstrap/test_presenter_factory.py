@@ -1,3 +1,5 @@
+from unittest.mock import Mock
+
 from counter_os.bootstrap.application_configuration import ApplicationConfiguration
 from counter_os.bootstrap.presenter_factory import create_presenters
 from counter_os.infrastructure.frontend_type import FrontendType
@@ -12,13 +14,8 @@ from counter_os.interfaces.presenters.flask_counter_presenter import (
 
 def test_create_presenters_invalid_config(capsys):
     # Arrange
-    config = ApplicationConfiguration(
-        counter_repository_type="",
-        counter_repository_location_sqlite_local="",
-        counter_repository_location_postgres_local="",
-        frontend_type="not a valid frontend",
-        app_env="",
-    )
+    config: ApplicationConfiguration = Mock()
+    config.frontend_type = "not a valid frontend"
 
     # Act
     presenters: tuple[CounterPresenter] = create_presenters(config)
@@ -36,13 +33,8 @@ def test_create_presenters_invalid_config(capsys):
 
 def test_create_presenters_CLI_config():
     # Arrange
-    config = ApplicationConfiguration(
-        counter_repository_type="",
-        counter_repository_location_sqlite_local="",
-        counter_repository_location_postgres_local="",
-        frontend_type=FrontendType.CLI,
-        app_env="",
-    )
+    config: ApplicationConfiguration = Mock()
+    config.frontend_type = FrontendType.CLI
 
     # Act
     presenters: tuple[CounterPresenter] = create_presenters(config)
@@ -54,13 +46,8 @@ def test_create_presenters_CLI_config():
 
 def test_create_presenters_FLASK_config():
     # Arrange
-    config = ApplicationConfiguration(
-        counter_repository_type="",
-        counter_repository_location_sqlite_local="",
-        counter_repository_location_postgres_local="",
-        frontend_type=FrontendType.FLASK,
-        app_env="",
-    )
+    config: ApplicationConfiguration = Mock()
+    config.frontend_type = FrontendType.FLASK
 
     # Act
     presenters: tuple[CounterPresenter] = create_presenters(config)

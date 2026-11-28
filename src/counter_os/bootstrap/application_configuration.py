@@ -17,6 +17,8 @@ class ApplicationConfiguration:
     counter_repository_location_postgres_local: str
     frontend_type: str
     app_env: str
+    flask_host: str
+    flask_port: str
 
     @classmethod
     def from_environment(
@@ -53,4 +55,6 @@ class ApplicationConfiguration:
             ),
             frontend_type=frontend,
             app_env=os.getenv("APP_ENV", ApplicationEnvironmentType.DEVELOPMENT),
+            flask_host=os.getenv("FLASK_HOST", "127.0.0.1"),
+            flask_port=os.getenv("FLASK_PORT", "5001"),
         )
