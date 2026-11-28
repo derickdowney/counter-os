@@ -2,7 +2,9 @@ import argparse
 import sys
 
 from counter_os.bootstrap.application_configuration import ApplicationConfiguration
-from counter_os.bootstrap.application_factory import create_application_container
+from counter_os.bootstrap.application_container_factory import (
+    create_application_container,
+)
 from counter_os.infrastructure.click_cli.click_cli_app import ClickCliApp
 from counter_os.interfaces.presenters.click_counter_presenter import (
     ClickCounterPresenter,
