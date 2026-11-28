@@ -3,4 +3,4 @@ from flask import Flask
 
 
 def test_flask_app_variable_is_Flask_instance():
-    isinstance(flask_app, Flask)
+    assert isinstance(flask_app, Flask)
